@@ -1,0 +1,13 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="card-container">
+    <mat-card class="activity-card" *ngFor="let place of places" [routerLink]="['/place']">
+        <mat-card-header>
+            <div mat-card-avatar class="activity-header-image"></div>
+            <mat-card-title>{{place.title}}</mat-card-title>
+            <mat-card-subtitle>{{place.address}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+
+    </mat-card>
+</div>
