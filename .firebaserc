@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "screenhush": {
+      "hosting": {
+        "ScreenHush": [
+          "screenhush"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "screenhush"
+  }
+}
