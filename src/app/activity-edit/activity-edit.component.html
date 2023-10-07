@@ -7,10 +7,44 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <mat-form-field class="full-width">
+        <mat-form-field>
             <mat-label>Title</mat-label>
             <input matInput name="activityTitle" [ngModel]="activity?.title"
                 (ngModelChange)="updateActivity({title: $event})" data-cy="activityTitle">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput name="address" [ngModel]="activity?.address"
+                (ngModelChange)="updateActivity({location: $event})" data-cy="address">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Link to maps</mat-label>
+            <input matInput name="mapsUrl" [ngModel]="activity?.mapsUrl"
+                (ngModelChange)="updateActivity({mapsUrl: $event})" data-cy="mapsUrl">
+            <mat-icon matSuffix>location_on</mat-icon>
+        </mat-form-field>
+        <div id="row">
+            <mat-form-field class="row-element">
+                <mat-label>Date</mat-label>
+                <input matInput name="date" [ngModel]="activity?.date" (ngModelChange)="updateActivity({date: $event})"
+                    data-cy="date">
+            </mat-form-field>
+            <mat-form-field class="row-element">
+                <mat-label>Time</mat-label>
+                <input matInput name="time" [ngModel]="activity?.time" (ngModelChange)="updateActivity({time: $event})"
+                    data-cy="time">
+            </mat-form-field>
+        </div>
+        <mat-form-field>
+            <mat-label>Tags</mat-label>
+            <input matInput name="tags" [ngModel]="activity?.tags" (ngModelChange)="updateActivity({tags: $event})"
+                data-cy="tags">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput rows="20" name="activityDescription" [ngModel]="activity?.description"
+                (ngModelChange)="updateActivity({description: $event})" data-cy="activityDescription">
+            </textarea>
         </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
