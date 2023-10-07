@@ -31,7 +31,8 @@ export class ActivityEditComponent {
     if (!this.activityId) {
       console.error('Activity ID is falsy');
       return;
-    } onAuthStateChanged(this.auth, async (user) => {
+    }
+    onAuthStateChanged(this.auth, async (user) => {
       if (!user) {
         console.error('User object is falsy');
         return;

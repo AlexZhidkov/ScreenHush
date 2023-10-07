@@ -15,7 +15,7 @@
         <mat-form-field>
             <mat-label>Address</mat-label>
             <input matInput name="address" [ngModel]="activity?.address"
-                (ngModelChange)="updateActivity({location: $event})" data-cy="address">
+                (ngModelChange)="updateActivity({address: $event})" data-cy="address">
         </mat-form-field>
         <mat-form-field>
             <mat-label>Link to maps</mat-label>
