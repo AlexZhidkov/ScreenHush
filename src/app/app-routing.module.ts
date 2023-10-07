@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { PlaceComponent } from './place/place.component';
 import { LoginComponent } from './login/login.component';
+import { ActivityComponent } from './activity/activity.component';
+import { CanActivateGuard } from './can-activate.guard';
+import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'place', component: PlaceComponent },
+  { path: 'edit-activity/:activityId', component: ActivityEditComponent, canActivate: [CanActivateGuard] },
+  { path: 'activity/:activityId', component: ActivityComponent },
   { path: '', component: HomeComponent }
 ];
 

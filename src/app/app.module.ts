@@ -18,6 +18,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AuthFirebaseuiAvatarComponent } from "./auth-firebaseui-avatar/auth-firebaseui-avatar.component";
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { ActivityComponent } from './activity/activity.component';
+import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -38,7 +40,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
-import { PlaceComponent } from './place/place.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { PlaceComponent } from './place/place.component';
     AuthFirebaseuiAvatarComponent,
     LoginComponent,
     HomeComponent,
-    PlaceComponent
+    ActivityComponent,
+    ActivityEditComponent
   ],
   imports: [
     BrowserModule,

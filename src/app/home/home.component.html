@@ -1,13 +1,27 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<mat-card *ngIf="user">
+    <mat-card-actions align="end">
+        <button mat-raised-button color="accent" (click)="createNewActivity()" data-cy="createNewActivityBtn">
+            <mat-icon inline=true>add_circle</mat-icon>
+            Create New Activity
+        </button>
+    </mat-card-actions>
+</mat-card>
 
 <div class="card-container">
-    <mat-card class="activity-card" *ngFor="let place of places$ | async" [routerLink]="['/place']">
+    <mat-card class="activity-card" *ngFor="let activity of activities$ | async">
         <mat-card-header>
             <div mat-card-avatar class="activity-header-image"></div>
-            <mat-card-title>{{place.title}}</mat-card-title>
-            <mat-card-subtitle>{{place.address}}</mat-card-subtitle>
+            <mat-card-title>{{activity.title}}</mat-card-title>
+            <mat-card-subtitle>{{activity.address}}</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-
+        <img mat-card-image [routerLink]="['activity', activity.id]"
+            src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+        <mat-card-actions *ngIf="user">
+            <button mat-raised-button data-cy="editActivityBtn" [routerLink]="['edit-activity', activity.id]">
+                <mat-icon>edit</mat-icon>
+                EDIT
+            </button>
+        </mat-card-actions>
     </mat-card>
 </div>
