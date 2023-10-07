@@ -40,6 +40,8 @@
             <input matInput name="tags" [ngModel]="activity?.tags" (ngModelChange)="updateActivity({tags: $event})"
                 data-cy="tags">
         </mat-form-field>
+        <p>Use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> language to format
+            text:</p>
         <mat-form-field>
             <mat-label>Description</mat-label>
             <textarea matInput rows="20" name="activityDescription" [ngModel]="activity?.description"
@@ -48,6 +50,10 @@
         </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
+        <button mat-raised-button data-cy="viewActivityBtn" [routerLink]="['/activity', activity?.id]">
+            <mat-icon>visibility</mat-icon>
+            VIEW
+        </button>
         <button mat-raised-button (click)="deleteActivity()" data-cy="deleteActivityBtn" style="color: red;">
             <mat-icon color="warn">delete</mat-icon>
             DELETE

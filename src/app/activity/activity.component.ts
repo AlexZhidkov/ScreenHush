@@ -14,8 +14,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./activity.component.css']
 })
 export class ActivityComponent {
+  private auth: Auth = inject(Auth);
   private firestore: Firestore = inject(Firestore);
   private analytics: Analytics = inject(Analytics);
+  user: User | null = null;
   activityId: string | null = null;
   activityDoc$!: Observable<any>;
   isLoading = true;
@@ -31,6 +33,13 @@ export class ActivityComponent {
       console.error('Activity ID is falsy');
       return;
     }
-    this.activityDoc$ = docData(doc(this.firestore, 'activities', this.activityId as string)) as Observable<any>;
+    onAuthStateChanged(this.auth, async (user) => {
+      if (!user) {
+        console.error('User object is falsy');
+        return;
+      }
+      this.user = user;
+    });
+    this.activityDoc$ = docData(doc(this.firestore, 'activities', this.activityId as string), { idField: 'id' }) as Observable<any>;
   }
 }

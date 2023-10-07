@@ -43,6 +43,7 @@ export class ActivityEditComponent {
     onSnapshot(this.activityRef, async (activitySnapshot) => {
       this.isLoading = false;
       this.activity = activitySnapshot.data();
+      this.activity.id = activitySnapshot.id;
       if (!this.activity) {
         console.error('Activity object is falsy');
         return;
