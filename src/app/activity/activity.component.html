@@ -8,9 +8,13 @@
     </mat-card-header>
     <img mat-card-image [src]="(activityDoc$ | async).imageUrl" alt="Image">
     <mat-card-content>
+        <mat-chip-set>
+            <mat-chip *ngFor="let tag of (activityDoc$ | async).tags">
+                {{tag}}
+            </mat-chip>
+        </mat-chip-set>
         <p>Date: {{(activityDoc$ | async).date}}</p>
         <p>Time: {{(activityDoc$ | async).time}}</p>
-        <p>Tags: {{(activityDoc$ | async).tags}} </p>
         <markdown [data]="(activityDoc$ | async).description"></markdown>
     </mat-card-content>
     <mat-card-actions>

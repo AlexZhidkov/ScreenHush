@@ -17,6 +17,11 @@
             <mat-card-subtitle>{{activity.address}}</mat-card-subtitle>
         </mat-card-header>
         <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
+        <mat-chip-set>
+            <mat-chip *ngFor="let tag of activity.tags">
+                {{tag}}
+            </mat-chip>
+        </mat-chip-set>
         <mat-card-actions *ngIf="user">
             <button mat-raised-button data-cy="editActivityBtn" [routerLink]="['edit-activity', activity.id]">
                 <mat-icon>edit</mat-icon>
