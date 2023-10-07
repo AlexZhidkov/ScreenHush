@@ -2,6 +2,11 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.5.
 
+## Issue
+To resolve `FirebaseError: [code=invalid-argument]: Expected first argument to collection() to be a CollectionReference`
+run `npm install rxfire@6.0.3`
+see https://stackoverflow.com/questions/77045547/error-rxfire-generic-type-aggregatequerysnapshott-requires-1-type-argument
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

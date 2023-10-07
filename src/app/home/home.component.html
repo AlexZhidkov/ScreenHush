@@ -1,7 +1,7 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
 <div class="card-container">
-    <mat-card class="activity-card" *ngFor="let place of places" [routerLink]="['/place']">
+    <mat-card class="activity-card" *ngFor="let place of places$ | async" [routerLink]="['/place']">
         <mat-card-header>
             <div mat-card-avatar class="activity-header-image"></div>
             <mat-card-title>{{place.title}}</mat-card-title>

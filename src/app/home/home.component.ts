@@ -1,9 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Analytics, logEvent } from '@angular/fire/analytics';
-import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
+import { Analytics } from '@angular/fire/analytics';
+import { Auth, User } from '@angular/fire/auth';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,17 +12,15 @@ import { Observable } from 'rxjs';
 export class HomeComponent implements OnInit {
   private firestore: Firestore = inject(Firestore);
   private analytics: Analytics = inject(Analytics);
-  isLoading = false;
+  isLoading = true;
   private auth: Auth = inject(Auth);
   user: User | null = null;
-  places: any[];
+  places$: Observable<any[]>;
 
   constructor() {
-    this.places = [
-      { title: 'FERNTREE RESERVE', address: '22 Ferntree Road, Engadine, NSW 2233' },
-      { title: 'HOLMLEA PLACE RESERVE', address: '40 Holmlea Place, Engadine NSW 2233' },
-      { title: 'PERRY PARK PLAYGROUND', address: '92 Woronora Road, Engadine NSW 2233' },
-    ];
+    const placesCollection = collection(this.firestore, 'places');
+    this.places$ = collectionData(placesCollection) as Observable<any[]>;
+    this.places$.subscribe(_ => this.isLoading = false);
   }
 
   ngOnInit(): void { }
