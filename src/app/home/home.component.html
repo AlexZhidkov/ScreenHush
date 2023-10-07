@@ -10,11 +10,16 @@
 
 <div class="card-container">
     <mat-card class="activity-card" *ngFor="let activity of activities$ | async">
-        <mat-card-header [routerLink]="['activity', activity.id]">
-            <div mat-card-avatar class="activity-header-image" [style]="'background-image: url('+activity.imageUrl+')'">
-            </div>
-            <mat-card-title>{{activity.title}}</mat-card-title>
-            <mat-card-subtitle>{{activity.address}}</mat-card-subtitle>
+        <mat-card-header>
+            <a mat-card-avatar [href]="activity.mapsUrl" target="_blank">
+                <mat-icon>location_on</mat-icon>
+            </a>
+            <mat-card-title [routerLink]="['activity', activity.id]">{{activity.title}}</mat-card-title>
+            <mat-card-subtitle>
+                <a mat-card-avatar [href]="activity.mapsUrl" target="_blank">
+                    {{activity.address}}
+                </a>
+            </mat-card-subtitle>
         </mat-card-header>
         <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
         <mat-chip-set>
