@@ -48,8 +48,15 @@
                 (ngModelChange)="updateActivity({description: $event})" data-cy="activityDescription">
             </textarea>
         </mat-form-field>
+        <img mat-card-xl-image style="height: auto;" [src]="imageUrl" alt="Image">
     </mat-card-content>
+    <mat-progress-bar *ngIf="isImageLoading" mode="indeterminate"></mat-progress-bar>
     <mat-card-actions>
+        <input hidden (change)="onImageSelected($event)" #fileInput type="file" id="uploadImage" accept='image/*'>
+        <button mat-raised-button data-cy="addPhotoBtn" (click)="fileInput.click()">
+            <mat-icon> add_a_photo</mat-icon>
+            ADD PHOTO
+        </button>
         <button mat-raised-button data-cy="viewActivityBtn" [routerLink]="['/activity', activity?.id]">
             <mat-icon>visibility</mat-icon>
             VIEW
