@@ -1,11 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Analytics, logEvent } from '@angular/fire/analytics';
 import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
 import { DocumentData, DocumentReference, Firestore, doc, onSnapshot, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Storage, ref, uploadString, getDownloadURL } from '@angular/fire/storage';
-import { Functions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { Observable, map, startWith } from 'rxjs';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-activity-edit',
@@ -25,10 +30,18 @@ export class ActivityEditComponent {
   imageUrl: string | undefined = undefined;
   isImageLoading: boolean = false;
 
+  //Tags
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  tagCtrl = new FormControl('');
+  filteredTags!: Observable<string[]>;
+  tags: string[] = [];
+  allTags: string[] = ['Park', 'Playground', 'Family', 'Couples', 'Event'];
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
+  announcer = inject(LiveAnnouncer);
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private readonly functions: Functions,
     private snackBar: MatSnackBar,
   ) {
     this.activityId = this.route.snapshot.paramMap.get('activityId');
@@ -36,6 +49,10 @@ export class ActivityEditComponent {
       console.error('Activity ID is falsy');
       return;
     }
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      startWith(null),
+      map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),
+    );
     onAuthStateChanged(this.auth, async (user) => {
       if (!user) {
         console.error('User object is falsy');
@@ -52,6 +69,7 @@ export class ActivityEditComponent {
         console.error('Activity object is falsy');
         return;
       }
+      this.tags = this.activity.tags || [];
       if (this.activity.imageUrl) {
         this.imageUrl = await getDownloadURL(ref(this.storage, `images/${this.activityId}-400`));
       }
@@ -146,4 +164,40 @@ export class ActivityEditComponent {
     const resizedDataUrl = canvas.toDataURL(fileType);
     return resizedDataUrl;
   }
+
+  // Tags section
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.tags.push(value);
+      this.updateActivity({ tags: this.tags });
+    }
+    event.chipInput!.clear();
+    this.tagCtrl.setValue(null);
+  }
+
+  remove(tag: string): void {
+    const index = this.tags.indexOf(tag);
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+      this.updateActivity({ tags: this.tags });
+
+      this.announcer.announce(`Removed ${tag}`);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.tags.push(event.option.viewValue);
+    this.updateActivity({ tags: this.tags });
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
+  }
+  // Tags section - end
+
 }

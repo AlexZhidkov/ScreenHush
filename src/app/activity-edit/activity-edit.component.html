@@ -48,6 +48,29 @@
                 (ngModelChange)="updateActivity({description: $event})" data-cy="activityDescription">
             </textarea>
         </mat-form-field>
+
+        <form>
+            <mat-form-field>
+                <mat-label>Tags</mat-label>
+                <mat-chip-grid #chipGrid aria-label="Tag selection">
+                    <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
+                        {{tag}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </mat-chip-grid>
+                <input placeholder="New Tag..." #tagInput [formControl]="tagCtrl" [matChipInputFor]="chipGrid"
+                    [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                        {{tag}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </form>
+
         <img mat-card-xl-image style="height: auto;" [src]="imageUrl" alt="Image">
     </mat-card-content>
     <mat-progress-bar *ngIf="isImageLoading" mode="indeterminate"></mat-progress-bar>

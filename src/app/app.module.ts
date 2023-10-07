@@ -1,6 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MarkdownModule } from 'ngx-markdown';
 
@@ -41,6 +41,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,7 @@ import { MatChipsModule } from '@angular/material/chips';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
@@ -71,6 +74,7 @@ import { MatChipsModule } from '@angular/material/chips';
     }),
     MarkdownModule.forRoot(),
     ClipboardModule,
+    MatFormFieldModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -88,7 +92,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatBadgeModule,
     MatDividerModule,
     MatSnackBarModule,
-    MatChipsModule
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   providers: [
     ScreenTrackingService, UserTrackingService
