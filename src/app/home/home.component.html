@@ -11,7 +11,8 @@
 <div class="card-container">
     <mat-card class="activity-card" *ngFor="let activity of activities$ | async">
         <mat-card-header>
-            <a mat-card-avatar [href]="activity.mapsUrl" target="_blank">
+            <img *ngIf="activity.icon" mat-card-avatar [src]="activity.icon">
+            <a img *ngIf="!activity.icon" mat-card-avatar [href]="activity.mapsUrl" target="_blank">
                 <mat-icon>location_on</mat-icon>
             </a>
             <mat-card-title [routerLink]="['activity', activity.id]">{{activity.title}}</mat-card-title>
