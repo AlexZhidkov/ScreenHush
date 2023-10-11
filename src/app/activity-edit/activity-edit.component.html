@@ -11,11 +11,13 @@
             <mat-label>Title</mat-label>
             <input matInput name="activityTitle" [ngModel]="activity?.title"
                 (ngModelChange)="updateActivity({title: $event})" data-cy="activityTitle">
+            <mat-icon matSuffix>toc</mat-icon>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Address</mat-label>
             <input matInput name="address" [ngModel]="activity?.address"
                 (ngModelChange)="updateActivity({address: $event})" data-cy="address">
+            <mat-icon matSuffix>map</mat-icon>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Link to maps</mat-label>
@@ -23,23 +25,26 @@
                 (ngModelChange)="updateActivity({mapsUrl: $event})" data-cy="mapsUrl">
             <mat-icon matSuffix>location_on</mat-icon>
         </mat-form-field>
+        <mat-form-field>
+            <mat-label>Website</mat-label>
+            <input matInput name="website" [ngModel]="activity?.website"
+                (ngModelChange)="updateActivity({mapsUrl: $event})" data-cy="mapsUrl">
+            <mat-icon matSuffix>public</mat-icon>
+        </mat-form-field>
         <div id="row">
             <mat-form-field class="row-element">
                 <mat-label>Date</mat-label>
                 <input matInput name="date" [ngModel]="activity?.date" (ngModelChange)="updateActivity({date: $event})"
                     data-cy="date">
+                <mat-icon matSuffix>calendar_month</mat-icon>
             </mat-form-field>
             <mat-form-field class="row-element">
                 <mat-label>Time</mat-label>
                 <input matInput name="time" [ngModel]="activity?.time" (ngModelChange)="updateActivity({time: $event})"
                     data-cy="time">
+                <mat-icon matSuffix>schedule</mat-icon>
             </mat-form-field>
         </div>
-        <mat-form-field>
-            <mat-label>Tags</mat-label>
-            <input matInput name="tags" [ngModel]="activity?.tags" (ngModelChange)="updateActivity({tags: $event})"
-                data-cy="tags">
-        </mat-form-field>
         <p>Use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> language to format
             text:</p>
         <mat-form-field>
