@@ -35,7 +35,7 @@ export class ActivityEditComponent {
   tagCtrl = new FormControl('');
   filteredTags!: Observable<string[]>;
   tags: string[] = [];
-  allTags: string[] = ['Park', 'Playground', 'Family', 'Couples', 'Event'];
+  allTags: string[] = ['Family', 'Couples', 'Just for Me', 'Event', 'Get Your Culture On', 'Feeling Sporty', 'Park', 'Playground', 'Market', 'Fair', 'Festival'];
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   announcer = inject(LiveAnnouncer);
 
