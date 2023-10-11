@@ -1,15 +1,43 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 <mat-card *ngIf="user">
     <mat-card-actions align="end">
+        <button mat-icon-button (click)="filterIsOpen=!filterIsOpen"
+            [style.background-color]="filterIsOpen ? 'gray':null">
+            <mat-icon>filter_list</mat-icon>
+        </button>
         <button mat-raised-button color="accent" (click)="createNewActivity()" data-cy="createNewActivityBtn">
             <mat-icon inline=true>add_circle</mat-icon>
             Create New Activity
         </button>
     </mat-card-actions>
 </mat-card>
+<mat-card *ngIf="filterIsOpen">
+    <mat-chip-listbox multiple #tagsList [(ngModel)]="selectedTagChips" aria-label="Filter">
+        <mat-chip-option *ngFor="let tag of allTags">{{tag}}</mat-chip-option>
+    </mat-chip-listbox>
+    <mat-card-actions align="end">
+        <button mat-raised-button (click)="selectedTagChips = []">
+            <mat-icon>close</mat-icon>
+            Clear
+        </button>
+        <button mat-raised-button (click)="applyFilter(tagsList.selected)">
+            <mat-icon>done</mat-icon>
+            Apply
+        </button>
+    </mat-card-actions>
+</mat-card>
+<mat-card *ngIf="!filterIsOpen">
+    <mat-chip-listbox aria-label="Selected tags">
+        <mat-chip *ngFor="let tag of selectedTags">{{tag}}
+            <button matChipRemove aria-label="Remove tag" (click)="removeSelectedTag(tag)">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip>
+    </mat-chip-listbox>
+</mat-card>
 
 <div class="card-container">
-    <mat-card class="activity-card" *ngFor="let activity of activities$ | async">
+    <mat-card class="activity-card" *ngFor="let activity of selectedActivities">
         <mat-card-header>
             <img *ngIf="activity.icon" mat-card-avatar [src]="activity.icon">
             <a img *ngIf="!activity.icon" mat-card-avatar [href]="activity.mapsUrl" target="_blank">

@@ -11,6 +11,7 @@ import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { ScreenHushService } from '../screen-hush.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -34,13 +35,14 @@ export class ActivityEditComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl('');
   filteredTags!: Observable<string[]>;
+  allTags: string[] = [];
   tags: string[] = [];
-  allTags: string[] = ['Family', 'Couples', 'Just for Me', 'Event', 'Get Your Culture On', 'Feeling Sporty', 'Park', 'Playground', 'Market', 'Fair', 'Festival'];
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   announcer = inject(LiveAnnouncer);
 
   constructor(
     private route: ActivatedRoute,
+    private service: ScreenHushService,
     private router: Router,
     private snackBar: MatSnackBar,
   ) {
@@ -49,6 +51,7 @@ export class ActivityEditComponent {
       console.error('Activity ID is falsy');
       return;
     }
+    this.allTags = service.getAllTags();
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),

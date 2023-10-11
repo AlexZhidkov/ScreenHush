@@ -43,6 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatSnackBarModule,
     MatChipsModule,
     MatAutocompleteModule,
+    MatSelectModule
   ],
   providers: [
     ScreenTrackingService, UserTrackingService
