@@ -64,3 +64,11 @@
         </mat-card-actions>
     </mat-card>
 </div>
+<mat-card *ngIf="!isLoading">
+    <mat-card-actions align="end">
+        <button mat-raised-button (click)="loadMore()" data-cy="loadMoreBtn">
+            <mat-icon>more</mat-icon>
+            LOAD MORE
+        </button>
+    </mat-card-actions>
+</mat-card>

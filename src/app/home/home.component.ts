@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Analytics } from '@angular/fire/analytics';
 import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
-import { CollectionReference, Firestore, collection, collectionData, doc, addDoc, DocumentReference } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { CollectionReference, Firestore, collection, collectionData, addDoc, DocumentReference, query, limit, orderBy, startAfter } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ScreenHushService } from '../screen-hush.service';
 import { MatChipOption } from '@angular/material/chips';
@@ -18,7 +17,6 @@ export class HomeComponent {
   isLoading = true;
   private auth: Auth = inject(Auth);
   user: User | null = null;
-  activities$: Observable<any[]>;
   allActivities: any[] = [];
   selectedActivities: any[] = [];
   activitiesCollection: CollectionReference;
@@ -39,14 +37,15 @@ export class HomeComponent {
       }
     });
     this.activitiesCollection = collection(this.firestore, 'activities');
-    this.activities$ = collectionData(this.activitiesCollection, { idField: 'id' }) as Observable<any[]>;
-    this.activities$.subscribe(data => {
-      this.allActivities = data;
-      if (this.selectedTags.length === 0) {
-        this.selectedActivities = this.allActivities;
-      };
-      this.isLoading = false;
-    });
+    const first = query(this.activitiesCollection, orderBy("title"), limit(25));
+    collectionData(first, { idField: 'id' })
+      .subscribe(data => {
+        this.allActivities = data;
+        if (this.selectedTags.length === 0) {
+          this.selectedActivities = this.allActivities;
+        };
+        this.isLoading = false;
+      });
   }
 
   createNewActivity() {
@@ -84,6 +83,18 @@ export class HomeComponent {
   removeSelectedTag(tag: string) {
     this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
     this.filterBySelectedTags();
+  }
+
+  loadMore() {
+    this.isLoading = true;
+    const last = this.allActivities[this.allActivities.length - 1];
+    const next = query(this.activitiesCollection, orderBy("title"), startAfter(last.title), limit(25));
+    collectionData(next, { idField: 'id' })
+      .subscribe(data => {
+        this.allActivities = this.allActivities.concat(data);
+        this.filterBySelectedTags();
+        this.isLoading = false;
+      });
   }
 }
 
