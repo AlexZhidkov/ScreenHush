@@ -28,7 +28,7 @@
         <mat-form-field>
             <mat-label>Website</mat-label>
             <input matInput name="website" [ngModel]="activity?.website"
-                (ngModelChange)="updateActivity({mapsUrl: $event})" data-cy="mapsUrl">
+                (ngModelChange)="updateActivity({website: $event})" data-cy="website">
             <mat-icon matSuffix>public</mat-icon>
         </mat-form-field>
         <div id="row">
