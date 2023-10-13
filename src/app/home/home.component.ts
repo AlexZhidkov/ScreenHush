@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Analytics } from '@angular/fire/analytics';
 import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
-import { CollectionReference, Firestore, collection, collectionData, addDoc, DocumentReference, query, limit, orderBy, startAfter } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, collection, collectionData, addDoc, DocumentReference, query, limit, orderBy, startAfter, endAt, getDocs, startAt } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ScreenHushService } from '../screen-hush.service';
 import { MatChipOption } from '@angular/material/chips';
+import { distanceBetween, geohashForLocation, geohashQueryBounds, Geopoint } from 'geofire-common';
 
 @Component({
   selector: 'app-home',
@@ -22,14 +23,17 @@ export class HomeComponent {
   activitiesCollection: CollectionReference;
   allTags: string[] = [];
   selectedTags: string[] = [];
-  filterIsOpen = false;
+  filterIsOpen = true;
   selectedTagChips: MatChipOption[] = [];
+  geoLocationHash: string | null = null;
+  center: Geopoint = [0, 0];
+  radiusInMeters = 5 * 1000;
 
   constructor(
-    private service: ScreenHushService,
+    private shService: ScreenHushService,
     private router: Router,
   ) {
-    this.allTags = service.getAllTags();
+    this.allTags = shService.getAllTags();
 
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
@@ -37,6 +41,56 @@ export class HomeComponent {
       }
     });
     this.activitiesCollection = collection(this.firestore, 'activities');
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position);
+        this.center = [position.coords.latitude, position.coords.longitude] as Geopoint;
+        //this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
+        this.loadGeoBoundActivities(this.center, this.radiusInMeters).then(() => {
+          this.selectedActivities = this.allActivities;
+        });
+      });
+    } else {
+      this.loadFirstActivities();
+    }
+  }
+
+  // Copied from https://firebase.google.com/docs/firestore/solutions/geoqueries
+  async loadGeoBoundActivities(center: Geopoint, radiusInMeters: number) {
+    // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
+    // a separate query for each pair. There can be up to 9 pairs of bounds
+    // depending on overlap, but in most cases there are 4.
+    const bounds = geohashQueryBounds(center, radiusInMeters);
+    const promises = [];
+    for (const b of bounds) {
+      const q = query(this.activitiesCollection,
+        orderBy('geoHash'), startAt(b[0]), endAt(b[1]));
+      promises.push(getDocs(q));
+    }
+
+    // Collect all the query results together into a single list
+    //const snapshots = await Promise.all(promises);
+    Promise.all(promises).then((snapshots) => {
+      this.allActivities = [];
+      for (const snap of snapshots) {
+        for (const doc of snap.docs) {
+          const activity = doc.data() as any;
+          // We have to filter out a few false positives due to GeoHash
+          // accuracy, but most will match
+          const distanceInKm = distanceBetween([activity.geoPoint.latitude, activity.geoPoint.longitude], center);
+          const distanceInM = distanceInKm * 1000;
+          if (distanceInM <= radiusInMeters) {
+            this.allActivities.push(activity);
+          }
+        }
+      }
+      this.isLoading = false;
+    });
+
+  }
+
+  loadFirstActivities() {
     const first = query(this.activitiesCollection, orderBy("title"), limit(25));
     collectionData(first, { idField: 'id' })
       .subscribe(data => {
@@ -55,7 +109,8 @@ export class HomeComponent {
       });
   }
 
-  applyFilter(selected: MatChipOption | MatChipOption[]) {
+  async applyFilter(selected: MatChipOption | MatChipOption[]) {
+    await this.loadGeoBoundActivities(this.center, this.radiusInMeters);
     this.selectedTags = (selected as MatChipOption[]).map((option: MatChipOption) => {
       return option.value;
     });

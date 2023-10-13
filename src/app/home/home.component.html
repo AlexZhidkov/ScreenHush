@@ -12,6 +12,22 @@
     </mat-card-actions>
 </mat-card>
 <mat-card *ngIf="filterIsOpen">
+    <mat-card-title>Preferences</mat-card-title>
+    <div id="row">
+        <mat-form-field class="row-element">
+            <mat-label>Latitude</mat-label>
+            <input matInput type="number" name="latitude" [(ngModel)]="center[0]" data-cy="latitude">
+        </mat-form-field>
+        <mat-form-field class="row-element">
+            <mat-label>Longitude</mat-label>
+            <input matInput type="number" name="longitude" [(ngModel)]="center[1]" data-cy="longitude">
+        </mat-form-field>
+        <mat-form-field class="row-element">
+            <mat-label>Radius in meters</mat-label>
+            <input matInput type="number" name="radius" [(ngModel)]="radiusInMeters" data-cy="radius">
+        </mat-form-field>
+    </div>
+
     <mat-chip-listbox multiple #tagsList [(ngModel)]="selectedTagChips" aria-label="Filter">
         <mat-chip-option *ngFor="let tag of allTags">{{tag}}</mat-chip-option>
     </mat-chip-listbox>
@@ -64,7 +80,7 @@
         </mat-card-actions>
     </mat-card>
 </div>
-<mat-card *ngIf="!isLoading">
+<mat-card *ngIf="false && !isLoading">
     <mat-card-actions align="end">
         <button mat-raised-button (click)="loadMore()" data-cy="loadMoreBtn">
             <mat-icon>more</mat-icon>
