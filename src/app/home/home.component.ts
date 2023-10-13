@@ -26,6 +26,7 @@ export class HomeComponent {
   filterIsOpen = true;
   selectedTagChips: MatChipOption[] = [];
   geoLocationHash: string | null = null;
+  geoLocationState: PermissionState | undefined = undefined;
   center: Geopoint = [0, 0];
   radiusInMeters = 5 * 1000;
 
@@ -42,6 +43,10 @@ export class HomeComponent {
     });
     this.activitiesCollection = collection(this.firestore, 'activities');
 
+    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      this.geoLocationState = result.state;
+    });
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position);
@@ -52,6 +57,7 @@ export class HomeComponent {
         });
       });
     } else {
+      debugger;
       this.loadFirstActivities();
     }
   }
