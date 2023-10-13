@@ -80,6 +80,7 @@ export class HomeComponent {
           // accuracy, but most will match
           const distanceInKm = distanceBetween([activity.geoPoint.latitude, activity.geoPoint.longitude], center);
           const distanceInM = distanceInKm * 1000;
+          activity.distanceInKm = distanceInKm;
           if (distanceInM <= radiusInMeters) {
             this.allActivities.push(activity);
           }
@@ -115,6 +116,9 @@ export class HomeComponent {
       return option.value;
     });
     this.filterBySelectedTags();
+    this.selectedActivities.sort((a, b) => {
+      return a.distanceInKm - b.distanceInKm;
+    });
   }
 
   filterBySelectedTags() {
