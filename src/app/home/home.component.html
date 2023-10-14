@@ -67,7 +67,9 @@
                 </a>
             </mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
+        <div class="activity-image-container">
+            <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
+        </div>
         <mat-chip-set>
             <mat-chip> {{activity.distanceInKm | number : '1.1-1'}} km </mat-chip>
             <mat-chip *ngFor="let tag of activity.tags">
