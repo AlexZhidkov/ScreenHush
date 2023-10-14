@@ -82,6 +82,7 @@ export class HomeComponent {
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
           const activity = doc.data() as any;
+          activity.id = doc.id;
           // We have to filter out a few false positives due to GeoHash
           // accuracy, but most will match
           const distanceInKm = distanceBetween([activity.geoPoint.latitude, activity.geoPoint.longitude], center);
