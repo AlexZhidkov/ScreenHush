@@ -50,8 +50,8 @@ export class HomeComponent {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position);
-        //this.center = [position.coords.latitude, position.coords.longitude] as Geopoint;
-        this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
+        this.center = [position.coords.latitude, position.coords.longitude] as Geopoint;
+        //this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
         this.loadGeoBoundActivities(this.center, this.radiusInMeters).then(() => {
           this.selectedActivities = this.allActivities;
         });
