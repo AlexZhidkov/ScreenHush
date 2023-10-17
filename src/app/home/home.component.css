@@ -17,7 +17,7 @@
 .activity-image-container {
     width: 400px;
     height: 400px;
-    background-color: ghostwhite;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
