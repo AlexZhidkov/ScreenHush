@@ -93,6 +93,10 @@ export class HomeComponent {
           }
         }
       }
+      this.filterBySelectedTags();
+      this.selectedActivities.sort((a, b) => {
+        return a.distanceInKm - b.distanceInKm;
+      });
       this.isLoading = false;
     });
 
@@ -118,18 +122,14 @@ export class HomeComponent {
   }
 
   async applyFilter(selected: MatChipOption | MatChipOption[]) {
-    await this.loadGeoBoundActivities(this.center, this.radiusInMeters);
     this.selectedTags = (selected as MatChipOption[]).map((option: MatChipOption) => {
       return option.value;
     });
-    this.filterBySelectedTags();
-    this.selectedActivities.sort((a, b) => {
-      return a.distanceInKm - b.distanceInKm;
-    });
+    await this.loadGeoBoundActivities(this.center, this.radiusInMeters);
+    this.filterIsOpen = false;
   }
 
   filterBySelectedTags() {
-    this.isLoading = true;
     if (this.selectedTags.length === 0) {
       this.selectedActivities = this.allActivities;
     } else {
@@ -142,8 +142,6 @@ export class HomeComponent {
         });
       });
     }
-    this.filterIsOpen = false;
-    this.isLoading = false;
   }
 
   removeSelectedTag(tag: string) {
