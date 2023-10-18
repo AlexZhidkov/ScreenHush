@@ -96,24 +96,24 @@ export class LoginComponent {
   onSuccess(user: User): void {
     setUserId(this.analytics, user.uid);
     logEvent(this.analytics, 'login', { uid: user.uid, providerId: user.providerData[0].providerId })
-    /* ToDo
-        const dbUserRef = doc(this.firestore, 'users', user.uid);
-        getDoc(dbUserRef).then((doc) => {
-          if (doc.exists()) {
-            const dbUser = doc.data();
-            if (!dbUser['photoURL']) {
-              updateDoc(dbUserRef, { photoURL: user.photoURL });
-            }
-          } else {
-            setDoc(dbUserRef, {
-              uid: user.uid,
-              displayName: user.displayName ?? this.name,
-              email: user.email ?? this.email,
-              photoURL: user.photoURL
-            });
-          }
+
+    const dbUserRef = doc(this.firestore, 'users', user.uid);
+    getDoc(dbUserRef).then((doc) => {
+      if (doc.exists()) {
+        const dbUser = doc.data();
+        if (!dbUser['photoURL']) {
+          updateDoc(dbUserRef, { photoURL: user.photoURL });
+        }
+      } else {
+        setDoc(dbUserRef, {
+          uid: user.uid,
+          displayName: user.displayName ?? this.name,
+          email: user.email ?? this.email,
+          photoURL: user.photoURL
         });
-    */
+      }
+    });
+
     this.route.queryParams.subscribe((params: { [x: string]: any; }) => {
       const redirectUrl = params['redirectUrl'];
       if (redirectUrl) {
