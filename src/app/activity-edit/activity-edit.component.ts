@@ -16,7 +16,7 @@ import { ScreenHushService } from '../screen-hush.service';
 @Component({
   selector: 'app-activity-edit',
   templateUrl: './activity-edit.component.html',
-  styleUrls: ['./activity-edit.component.css']
+  styleUrls: ['./activity-edit.component.scss']
 })
 export class ActivityEditComponent {
   private auth: Auth = inject(Auth);

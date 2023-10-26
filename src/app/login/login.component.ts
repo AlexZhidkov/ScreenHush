@@ -10,7 +10,7 @@ import { Analytics, logEvent, setUserId } from '@angular/fire/analytics';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   private auth: Auth = inject(Auth);
