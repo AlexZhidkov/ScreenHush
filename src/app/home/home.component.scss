@@ -1,3 +1,30 @@
+.title {
+    font-size: 1.5rem;
+}
+
+.geolocation-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.preferences-container {
+    display: flex;
+    margin: 0.5rem 0.5rem;
+
+    .preferences-inner-container {
+        margin: 1rem 1rem;
+    }
+
+    .row-element {
+        width: 100%;
+        margin-right: 1rem;
+
+        @media screen and (min-width: 767px) {
+            max-width: 200px;
+        }
+    }
+}
+
 .card-container {
     margin-top: 8px;
     display: flex;
