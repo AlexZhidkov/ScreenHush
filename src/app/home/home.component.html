@@ -11,22 +11,27 @@
         </button>
     </mat-card-actions>
 </mat-card>
-<mat-card *ngIf="filterIsOpen">
-    <mat-card-title>Preferences</mat-card-title>
-    <p>Geo Location State: {{geoLocationState}}</p>
-    <div id="row">
-        <mat-form-field class="row-element">
-            <mat-label>Latitude</mat-label>
-            <input matInput type="number" name="latitude" [(ngModel)]="center[0]" data-cy="latitude">
-        </mat-form-field>
-        <mat-form-field class="row-element">
-            <mat-label>Longitude</mat-label>
-            <input matInput type="number" name="longitude" [(ngModel)]="center[1]" data-cy="longitude">
-        </mat-form-field>
-        <mat-form-field class="row-element">
-            <mat-label>Radius in meters</mat-label>
-            <input matInput type="number" name="radius" [(ngModel)]="radiusInMeters" data-cy="radius">
-        </mat-form-field>
+<mat-card *ngIf="filterIsOpen" class="preferences-container">
+    <div class="preferences-inner-container">
+    <mat-card-title class="title">Preferences</mat-card-title>
+    <app-location-autocomplete (selectedLocation)="onLocationSelected($event)"></app-location-autocomplete>
+    <mat-error *ngIf="geoLocationError">Error setting Geolocation</mat-error>
+    <div class="geolocation-container">
+        <p>Geo Location State: {{geoLocationState}}</p>
+        <div id="row" class="">
+            <mat-form-field class="row-element">
+                <mat-label>Latitude</mat-label>
+                <input matInput type="number" name="latitude" [(ngModel)]="center[0]" data-cy="latitude">
+            </mat-form-field>
+            <mat-form-field class="row-element">
+                <mat-label>Longitude</mat-label>
+                <input matInput type="number" name="longitude" [(ngModel)]="center[1]" data-cy="longitude">
+            </mat-form-field>
+            <mat-form-field class="row-element">
+                <mat-label>Radius in meters</mat-label>
+                <input matInput type="number" name="radius" [(ngModel)]="radiusInMeters" data-cy="radius">
+            </mat-form-field>
+        </div>
     </div>
 
     <mat-chip-listbox multiple #tagsList [(ngModel)]="selectedTagChips" aria-label="Filter">
@@ -42,6 +47,7 @@
             Apply
         </button>
     </mat-card-actions>
+</div>
 </mat-card>
 <mat-card *ngIf="!filterIsOpen">
     <mat-chip-listbox aria-label="Selected tags">

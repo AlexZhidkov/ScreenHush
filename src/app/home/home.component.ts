@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { ScreenHushService } from '../screen-hush.service';
 import { MatChipOption } from '@angular/material/chips';
 import { distanceBetween, geohashForLocation, geohashQueryBounds, Geopoint } from 'geofire-common';
+import { AutocompleteResult } from '../model/autocomplete-result.model';
+import { GeolocationService } from '../services/geolocation.service';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +19,7 @@ export class HomeComponent {
   private analytics: Analytics = inject(Analytics);
   isLoading = true;
   private auth: Auth = inject(Auth);
+  geoLocationError = false;
   user: User | null = null;
   allActivities: any[] = [];
   selectedActivities: any[] = [];
@@ -32,6 +35,7 @@ export class HomeComponent {
 
   constructor(
     private shService: ScreenHushService,
+    private geolocationService: GeolocationService, 
     private router: Router,
   ) {
     this.allTags = shService.getAllTags();
@@ -160,5 +164,19 @@ export class HomeComponent {
         this.isLoading = false;
       });
   }
-}
 
+  onLocationSelected(suggestion: AutocompleteResult) {
+    this.geolocationService
+      .getGeoLocation(suggestion.placeId)
+      .then((geoLocations) => {
+        const locationResult = geoLocations[0]
+        this.center = [
+          locationResult.latitude,
+          locationResult.longitude,
+        ] as Geopoint;
+      })
+      .catch((error) => {
+        this.geoLocationError = true;
+      });
+  }
+}
