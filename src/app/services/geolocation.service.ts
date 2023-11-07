@@ -18,9 +18,15 @@ export class GeolocationService {
         return from([this.defaultLocations]);
       } else {
         return new Observable<AutocompleteResult[]>((observer) => {
-          this.autocompleteService.getPlacePredictions({ input }, (predictions, status) => {
+          const request = {
+            input,
+            componentRestrictions: { country: 'au' },
+            types: ['administrative_area_level_1', 'locality', 'postal_code'],
+            fields: ['place_id', 'description']
+          }
+          this.autocompleteService.getPlacePredictions(request, (predictions, status) => {
             if (status !== google.maps.places.PlacesServiceStatus.OK || !predictions) {
-              observer.error('Error fetching predictions');
+              console.error('Error fetching predictions');
             } else {
               const suggestions: AutocompleteResult[] = predictions.map((prediction) => ({
                 placeId: prediction.place_id,
