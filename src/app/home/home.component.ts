@@ -35,8 +35,8 @@ export class HomeComponent {
 
   constructor(
     private shService: ScreenHushService,
-    private geolocationService: GeolocationService, 
     private router: Router,
+    private geolocationService: GeolocationService
   ) {
     this.allTags = shService.getAllTags();
 

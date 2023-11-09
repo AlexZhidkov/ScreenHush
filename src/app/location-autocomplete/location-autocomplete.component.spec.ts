@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { LocationautocompleteComponent } from './location-autocomplete.component';
+import { LocationAutocompleteComponent } from './location-autocomplete.component';
 import { GeolocationService } from '../services/geolocation.service';
 import { of } from 'rxjs';
 
-describe('LocationautocompleteComponent', () => {
-  let component: LocationautocompleteComponent;
-  let fixture: ComponentFixture<LocationautocompleteComponent>;
+describe('LocationAutocompleteComponent', () => {
+  let component: LocationAutocompleteComponent;
+  let fixture: ComponentFixture<LocationAutocompleteComponent>;
 
   // Create a mock service with a mocked getPredictions method
   const geolocationServiceMock = {
@@ -15,13 +15,13 @@ describe('LocationautocompleteComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LocationautocompleteComponent],
+      declarations: [LocationAutocompleteComponent],
       imports: [ReactiveFormsModule],
       providers: [
         { provide: GeolocationService, useValue: geolocationServiceMock },
       ],
     });
-    fixture = TestBed.createComponent(LocationautocompleteComponent);
+    fixture = TestBed.createComponent(LocationAutocompleteComponent);a
     component = fixture.componentInstance;
   });
 

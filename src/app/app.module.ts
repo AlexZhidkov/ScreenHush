@@ -44,7 +44,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { LocationautocompleteComponent } from './location-autocomplete/location-autocomplete.component';
+import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +54,7 @@ import { LocationautocompleteComponent } from './location-autocomplete/location-
     HomeComponent,
     ActivityComponent,
     ActivityEditComponent,
-    LocationautocompleteComponent,
+    LocationAutocompleteComponent,
   ],
   imports: [
     BrowserModule,
