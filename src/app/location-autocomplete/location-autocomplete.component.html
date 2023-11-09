@@ -1,11 +1,12 @@
 <form class="autocomplete-form">
-    <p>Enter a location</p>
     <mat-form-field *ngIf="isGoogleLibrariesLoaded" class="autocomplete-input">
         <mat-label>Location</mat-label>
-        <input type="text" placeholder="Search for a location" matInput [formControl]="searchInput" [matAutocomplete]="auto">
+        <input type="text" placeholder="Enter suburb or post code" matInput [formControl]="searchInput"
+            [matAutocomplete]="auto">
         <mat-error *ngIf="searchInput.hasError('serverError')">{{getErrorMessage()}}</mat-error>
         <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (click)="selectedLocation.emit(suggestion)" *ngFor="let suggestion of suggestions | async" [value]="suggestion.description">
+            <mat-option (click)="selectedLocation.emit(suggestion)" *ngFor="let suggestion of suggestions | async"
+                [value]="suggestion.description">
                 {{suggestion.description}}
             </mat-option>
         </mat-autocomplete>

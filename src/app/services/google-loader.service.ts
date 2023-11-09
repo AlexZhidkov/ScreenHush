@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class GoogleLoaderService {
-  onGooglelibrariesDidLoad$ = new BehaviorSubject<boolean>(false);
+  onGoogleLibrariesDidLoad$ = new BehaviorSubject<boolean>(false);
   private loader: Loader;
   geoCodingService: google.maps.Geocoder;
   autocompleteService: google.maps.places.AutocompleteService;
@@ -30,10 +30,10 @@ export class GoogleLoaderService {
         this.geoCodingService = new google.maps.Geocoder();
         this.autocompleteService = new google.maps.places.AutocompleteService();
 
-        this.onGooglelibrariesDidLoad$.next(true);
+        this.onGoogleLibrariesDidLoad$.next(true);
       })
       .catch((e) => {
-        this.onGooglelibrariesDidLoad$.next(false);
+        this.onGoogleLibrariesDidLoad$.next(false);
         console.log("Error loading google libraries");
       });
   }

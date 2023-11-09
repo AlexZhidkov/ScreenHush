@@ -13,16 +13,16 @@ import { GeolocationService } from '../services/geolocation.service';
 })
 export class LocationAutocompleteComponent {
   @Output() selectedLocation = new EventEmitter<AutocompleteResult>();
-  constructor(private geolocationService: GeolocationService, private googleLoaderService: GoogleLoaderService) {}
+  constructor(private geolocationService: GeolocationService, private googleLoaderService: GoogleLoaderService) { }
   suggestions: Observable<AutocompleteResult[]>;
   searchInput = new FormControl('');
   isGoogleLibrariesLoaded: boolean = false;
 
   ngOnInit() {
-    this.googleLoaderService.onGooglelibrariesDidLoad$.subscribe((loaded) => {
+    this.googleLoaderService.onGoogleLibrariesDidLoad$.subscribe((loaded) => {
       this.isGoogleLibrariesLoaded = loaded;
     });
-            
+
     this.suggestions = this.searchInput.valueChanges.pipe(
       startWith(''),
       switchMap((value) => this.geolocationService.getPredictions(value)),

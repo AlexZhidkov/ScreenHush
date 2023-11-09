@@ -11,7 +11,7 @@ export class GeolocationService {
   private defaultLocations = [];
   private defaultGeolocationResult = [{ latitude: 0, longitude: 0 }];
 
-  constructor(private googleLoader: GoogleLoaderService) {}
+  constructor(private googleLoader: GoogleLoaderService) { }
 
   getPredictions(input: string | null): Observable<AutocompleteResult[]> {
     return defer(() => {
@@ -32,8 +32,10 @@ export class GeolocationService {
                 status !== google.maps.places.PlacesServiceStatus.OK ||
                 !predictions
               ) {
-                observer.error('Error fetching predictions');
                 console.error('Error fetching predictions');
+                // If enabled, this will cause the location autocomplete to stop working
+                // after the search string wasn't found in the Google Maps API
+                // observer.error('Error fetching predictions');
               } else {
                 const suggestions: AutocompleteResult[] = predictions.map(
                   (prediction) => ({
