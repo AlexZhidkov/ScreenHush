@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LinkMenuItem } from './auth-firebaseui-avatar/auth-firebaseui-avatar.component';
 import { Analytics, logEvent } from '@angular/fire/analytics';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,8 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  private auth: Auth = inject(Auth);
-  private analytics: Analytics = inject(Analytics); showSignInButton: boolean = false;
+  private analytics: Analytics = inject(Analytics);
 
   avatarLinks: LinkMenuItem[] = [
     { icon: 'account_circle', text: `Profile`, callback: () => { this.router.navigate(['profile']); } },
@@ -25,12 +23,6 @@ export class AppComponent {
   ];
 
   constructor(private router: Router) { }
-
-  async ngOnInit(): Promise<void> {
-    onAuthStateChanged(this.auth, (user) => {
-      this.showSignInButton = Boolean(!user);
-    });
-  }
 
   onSignOut(): void {
     logEvent(this.analytics, 'user_signed_out');

@@ -9,8 +9,8 @@ import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'edit-activity/:activityId', component: ActivityEditComponent, canActivate: [CanActivateGuard] },
-  { path: 'activity/:activityId', component: ActivityComponent },
-  { path: '', component: HomeComponent }
+  { path: 'activity/:activityId', component: ActivityComponent, canActivate: [CanActivateGuard] },
+  { path: '', component: HomeComponent, canActivate: [CanActivateGuard] }
 ];
 
 @NgModule({
