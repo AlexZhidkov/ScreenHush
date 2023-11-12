@@ -45,6 +45,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
+import { ActivityCardComponent } from './activity-card/activity-card.component';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 @NgModule({
   declarations: [
@@ -55,11 +57,13 @@ import { LocationAutocompleteComponent } from './location-autocomplete/location-
     ActivityComponent,
     ActivityEditComponent,
     LocationAutocompleteComponent,
+    ActivityCardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    DragScrollModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

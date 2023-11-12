@@ -1,0 +1,53 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+
+    @if $color-config !=null {
+        $primary-palette: map.get($color-config, 'primary');
+
+        body {
+            background: linear-gradient(180deg, mat.get-color-from-palette($primary-palette, 500) 0.25%, mat.get-color-from-palette($primary-palette, 900) 84.69%) center no-repeat;
+            background-attachment: fixed;
+            background-size: auto 100%;
+            margin: 0;
+        }
+    }
+}
+
+html,
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 100vh;
+    font-size: 16px;
+    font-family: "liebling";
+    overflow-x: hidden;
+
+    /* For Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: transparent;
+
+    /* For Internet Explorer and Edge */
+    -ms-overflow-style: none;
+    /* Hide scrollbar in IE and Edge */
+    scrollbar-width: thin;
+    scrollbar-color: transparent;
+
+    /* For WebKit/Blink Browsers (Chrome, Safari, Opera) */
+    ::-webkit-scrollbar {
+        width: 1px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 6px;
+        border: 3px solid transparent;
+    }
+}

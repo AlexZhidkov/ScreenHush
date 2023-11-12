@@ -1,7 +1,30 @@
-.mat-raised-button {
-  margin: 0.2rem 1rem;
+@import '../../app/styles/media';
+
+.avatar {
+  display: flex;
+  padding-right: 3.75rem;
+
+  @include breakpoint(xl, max) {
+    padding-right: 1rem;
+  }
+
+  .mat-raised-button {
+    margin: 0.2rem 1rem;
+  }
+
+  .links-menu {
+    text-align: center;
+  }
 }
 
-.links-menu {
-  text-align: center;
+.mat-mdc-menu-panel {
+  background: white !important;
+}
+
+.firebase-username {
+  display: flex;
+
+  @include breakpoint(xl, max) {
+    display: none;
+  }
 }

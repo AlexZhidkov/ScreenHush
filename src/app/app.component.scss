@@ -1,3 +1,280 @@
-.mat-toolbar .spacer {
-    flex: 1;
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '../app/styles/_media';
+
+$icon-map: (
+    group: "\e7ef",
+    location: "\e55f",
+    date: "\e935",
+    price: "\e227",
+    categories: "\e7c8",
+);
+
+@mixin icon($name) {
+    &:before {
+        font-family: "Material Icons";
+        content: map-get($icon-map, $name);
+        position: absolute;
+        transform: translate(25%, 0);
+        left: 0.4rem;
+        font-size: 1rem;
+        display: flex;
+    }
+}
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+    $typography-config: mat.get-typography-config($theme);
+
+    @if $color-config !=null {
+        $primary-palette: map.get($color-config, 'primary');
+        $barColor: mat.get-color-from-palette($primary-palette, 800);
+        $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
+        $captionColour: mat.get-color-from-palette($primary-palette, 500-contrast);
+
+        .app {
+            margin-left: 3.75rem;
+            background: transparent;
+            color: $textColor;
+
+            .navbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                padding: 1.5rem 0;
+
+                .navbar-mobile {
+                    display: none;
+
+                    @include breakpoint(xl, max) {
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .avatar {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        padding-bottom: 0.62rem;
+                    }
+
+                    .mobile-options {
+                        display: flex;
+                        flex-direction: row;
+                        width: 100%;
+                    }
+                }
+
+                .navbar-left {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+
+                    @include breakpoint(xl, max) {
+                        display: none;
+                    }
+                }
+
+                .navbar-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+
+                    .username {
+                        display: none;
+
+                        @include breakpoint(xl, max) {
+                            display: block;
+                            color: white;
+                            font-size: 1.25rem;
+                            font-weight: 400;
+                            line-height: 2rem;
+                            letter-spacing: 0.01563rem;
+                            padding-bottom: 1.25rem;
+                        }
+                    }
+
+                    @include breakpoint(xl, max) {
+                        display: none;
+                    }
+                }
+
+                .nav-option {
+                    .mat-mdc-chip-action {
+                        padding: 0 0.5rem;
+                    }
+
+                    .profile {
+                        .mat-mdc-select-trigger {  @include icon(group);}
+                    }
+                   
+                    .date {
+                        .mat-mdc-select-trigger {  @include icon(date);}
+                    }
+
+                    .price {
+                        .mat-mdc-select-trigger {  @include icon(price);}
+                    }
+
+                    .categories {
+                        .mat-mdc-select-trigger {  @include icon(categories);}
+                    }
+
+                    .mat-mdc-select-trigger {
+                        font-size: 1rem;
+                        padding: 0.2rem 0.5rem 0.2rem 2rem;
+                        background: rgba(3, 70, 99, 0.50) !important;
+                        border: 1px solid rgba(254, 255, 215, 0.10);
+                        border-radius: 2rem;
+                    }
+
+                    .mat-mdc-select-arrow-wrapper {
+                        padding: 0 0.25rem 0 0.50rem;
+                    }
+
+                    mat-icon {
+                        display: flex;
+                        align-items: center;
+                        margin-right: 0.38rem;
+                        font-size: 0.875rem;
+                        color: $textColor;
+                        line-height: 1.25rem;
+                    }
+
+                    .mdc-evolution-chip__text-label {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        span {
+                            color: $textColor !important;
+                        }
+                    }
+
+                    .mat-mdc-select-arrow {
+                        color: $textColor;
+                    }
+                }
+
+                .logo-container {
+                    display: none;
+
+                    @include breakpoint(xl, min) {
+                        display: block;
+                        padding-right: 2rem;
+
+                        .logo {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 2.81431rem;
+                            height: 2.81431rem;
+                        }
+                    }
+                }
+
+                @include breakpoint(xl, max) {
+                    flex-direction: column;
+                }
+            }
+
+            @include breakpoint(xl, max) {
+                margin-left: 1rem;
+            }
+        }
+
+        .select-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 11rem;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(12.5px) !important;
+            overflow: hidden !important;
+            border-radius: 0.5rem !important;
+            padding: 9px 0;
+            color: $textColor;
+            font-size: 1rem;
+
+            mat-option {
+                &:not(:first-child) {
+                    border-top: 1px solid rgba(255, 255, 255, 0.30);
+                }
+
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                overflow: hidden !important;
+
+                span {
+                    padding: 0 1rem;
+                    line-height: 1rem;
+                }
+            }
+
+            mat-pseudo-checkbox {
+                display: none;
+            }
+
+            span {
+                color: $textColor;
+            }
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            .toolbarNav {
+                display: none;
+
+                @include breakpoint(xl, max) {
+                    display: flex;
+                    position: fixed;
+                    bottom: 0;
+                    z-index: 1000;
+                    justify-content: space-around;
+                    width: 100%;
+                    background: #0C1B2240;
+                    backdrop-filter: blur(25px);
+
+                    button {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        color: $captionColour;
+                        width: 100%;
+                        padding: 0.5rem 0.75rem;
+                        background: transparent;
+                        border: none;
+
+                        &.active-link {
+                            color: white;
+                        }
+
+                        mat-icon {
+                            font-size: 1.25rem;
+                        }
+
+                        span {
+                            display: block;
+                            text-align: center;
+                            font-size: 0.75rem;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: 1.25rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

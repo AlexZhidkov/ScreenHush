@@ -1,100 +1,16 @@
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-<mat-card *ngIf="user">
-    <mat-card-actions align="end">
-        <button mat-icon-button (click)="filterIsOpen=!filterIsOpen"
-            [style.background-color]="filterIsOpen ? 'gray':null">
-            <mat-icon>filter_list</mat-icon>
-        </button>
-        <button mat-raised-button color="accent" (click)="createNewActivity()" data-cy="createNewActivityBtn">
-            <mat-icon inline=true>add_circle</mat-icon>
-            Create New Activity
-        </button>
-    </mat-card-actions>
-</mat-card>
-<mat-card *ngIf="filterIsOpen" class="preferences-container">
-    <div class="preferences-inner-container">
-    <mat-card-title class="title">Preferences</mat-card-title>
-    <app-location-autocomplete (selectedLocation)="onLocationSelected($event)"></app-location-autocomplete>
-    <mat-error *ngIf="geoLocationError">Error setting Geolocation</mat-error>
-    <div class="geolocation-container">
-        <p>Geo Location State: {{geoLocationState}}</p>
-        <div id="row" class="">
-            <mat-form-field class="row-element">
-                <mat-label>Latitude</mat-label>
-                <input matInput type="number" name="latitude" [(ngModel)]="center[0]" data-cy="latitude">
-            </mat-form-field>
-            <mat-form-field class="row-element">
-                <mat-label>Longitude</mat-label>
-                <input matInput type="number" name="longitude" [(ngModel)]="center[1]" data-cy="longitude">
-            </mat-form-field>
-            <mat-form-field class="row-element">
-                <mat-label>Radius in meters</mat-label>
-                <input matInput type="number" name="radius" [(ngModel)]="radiusInMeters" data-cy="radius">
-            </mat-form-field>
+<div class="home">
+    <div class="section" *ngFor="let section of homeSection">
+        <div class="section-container">
+            <h1 headline-5>{{section.category}}</h1>
+            <span *ngFor="let tag of section.tags">{{tag}}</span>
         </div>
+
+        <drag-scroll #nav>
+            <div class="card-container">
+                <mat-card drag-scroll-item class="activity-card" *ngFor="let activity of section.items">
+                    <app-activity-card [activity]="activity" *ngIf="activity.imageUrl !==undefined"></app-activity-card>
+                </mat-card>
+            </div>
+        </drag-scroll>
     </div>
-
-    <mat-chip-listbox multiple #tagsList [(ngModel)]="selectedTagChips" aria-label="Filter">
-        <mat-chip-option *ngFor="let tag of allTags">{{tag}}</mat-chip-option>
-    </mat-chip-listbox>
-    <mat-card-actions align="end">
-        <button mat-raised-button (click)="selectedTagChips = []">
-            <mat-icon>close</mat-icon>
-            Clear
-        </button>
-        <button mat-raised-button (click)="applyFilter(tagsList.selected)">
-            <mat-icon>done</mat-icon>
-            Apply
-        </button>
-    </mat-card-actions>
 </div>
-</mat-card>
-<mat-card *ngIf="!filterIsOpen">
-    <mat-chip-listbox aria-label="Selected tags">
-        <mat-chip *ngFor="let tag of selectedTags">{{tag}}
-            <button matChipRemove aria-label="Remove tag" (click)="removeSelectedTag(tag)">
-                <mat-icon>cancel</mat-icon>
-            </button>
-        </mat-chip>
-    </mat-chip-listbox>
-</mat-card>
-
-<div class="card-container">
-    <mat-card class="activity-card" *ngFor="let activity of selectedActivities">
-        <mat-card-header>
-            <img *ngIf="activity.icon" mat-card-avatar [src]="activity.icon">
-            <a img *ngIf="!activity.icon" mat-card-avatar [href]="activity.mapsUrl" target="_blank">
-                <mat-icon>location_on</mat-icon>
-            </a>
-            <mat-card-title [routerLink]="['activity', activity.id]">{{activity.title}}</mat-card-title>
-            <mat-card-subtitle>
-                <a mat-card-avatar [href]="activity.mapsUrl" target="_blank">
-                    {{activity.address}}
-                </a>
-            </mat-card-subtitle>
-        </mat-card-header>
-        <div class="activity-image-container">
-            <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
-        </div>
-        <mat-chip-set>
-            <mat-chip> {{activity.distanceInKm | number : '1.1-1'}} km </mat-chip>
-            <mat-chip *ngFor="let tag of activity.tags">
-                {{tag}}
-            </mat-chip>
-        </mat-chip-set>
-        <mat-card-actions *ngIf="user">
-            <button mat-raised-button data-cy="editActivityBtn" [routerLink]="['edit-activity', activity.id]">
-                <mat-icon>edit</mat-icon>
-                EDIT
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</div>
-<mat-card *ngIf="false && !isLoading">
-    <mat-card-actions align="end">
-        <button mat-raised-button (click)="loadMore()" data-cy="loadMoreBtn">
-            <mat-icon>more</mat-icon>
-            LOAD MORE
-        </button>
-    </mat-card-actions>
-</mat-card>
