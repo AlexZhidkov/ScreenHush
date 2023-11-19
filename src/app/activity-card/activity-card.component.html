@@ -1,0 +1,20 @@
+<mat-card class="activity-card">
+    <div class="activity-image-container">
+        <img mat-card-image [routerLink]="['activity', activity.id]" [src]="activity.imageUrl" alt="Image">
+    </div>
+    <mat-card-content>
+        <div class="activity-title">
+            <p>{{activity.title}}</p>
+            <div class="activity-title-location">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon>
+                <p class="activity-distance">{{distance}}km</p>
+            </div>
+        </div>
+
+        <p class="activity-date">02.11.23</p>
+        <div [ngClass]="tipClass" matTooltip="Info about the action"
+            aria-label="Button that displays a tooltip when focused or hovered over">
+            {{tipText}}
+        </div>
+    </mat-card-content>
+</mat-card>

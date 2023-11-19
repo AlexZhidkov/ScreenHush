@@ -13,6 +13,7 @@ import { GeolocationService } from '../services/geolocation.service';
 })
 export class LocationAutocompleteComponent {
   @Output() selectedLocation = new EventEmitter<AutocompleteResult>();
+  @Output() useMyLocation = new EventEmitter<boolean>();
   constructor(private geolocationService: GeolocationService, private googleLoaderService: GoogleLoaderService) { }
   suggestions: Observable<AutocompleteResult[]>;
   searchInput = new FormControl('');

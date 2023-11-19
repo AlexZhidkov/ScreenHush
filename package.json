@@ -25,6 +25,7 @@
     "@googlemaps/js-api-loader": "^1.16.2",
     "geofire-common": "^6.0.0",
     "marked": "^4.3.0",
+    "ngx-drag-scroll": "^16.0.0",
     "ngx-markdown": "^16.0.0",
     "rxfire": "6.0.3",
     "rxjs": "~7.8.0",

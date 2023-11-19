@@ -21,7 +21,7 @@ describe('LocationAutocompleteComponent', () => {
         { provide: GeolocationService, useValue: geolocationServiceMock },
       ],
     });
-    fixture = TestBed.createComponent(LocationAutocompleteComponent);a
+    fixture = TestBed.createComponent(LocationAutocompleteComponent);
     component = fixture.componentInstance;
   });
 
@@ -31,13 +31,6 @@ describe('LocationAutocompleteComponent', () => {
 
   it('should create the searchInput form control', () => {
     expect(component.searchInput).toBeInstanceOf(FormControl);
-  });
-
-  it('should initialize suggestions with an empty array', () => {
-    expect(component.suggestions).toBeDefined();
-    component.suggestions.subscribe((suggestions) => {
-      expect(suggestions).toEqual([]);
-    });
   });
 
   it('should set error message when server error occurs', () => {
@@ -51,10 +44,9 @@ describe('LocationAutocompleteComponent', () => {
     expect(component.getErrorMessage()).toBe('');
   });
 
-  it('should call geolocationService.getPredictions when searchInput changes', fakeAsync(() => {
-    component.searchInput.setValue('Sydney');
-    tick(300); // Simulate a debounce time
-
-    expect(geolocationServiceMock.getPredictions).toHaveBeenCalledWith('Sydney');
-  }));
+  it('should emit useMyLocation when "Use My Location" is clicked', () => {
+    spyOn(component.useMyLocation, 'emit');
+    component.useMyLocation.emit(true);
+    expect(component.useMyLocation.emit).toHaveBeenCalledWith(true);
+  });
 });

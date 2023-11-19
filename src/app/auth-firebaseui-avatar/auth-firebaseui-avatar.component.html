@@ -1,12 +1,15 @@
 <!--ToDo: review this-->
-<button *ngIf="user" class="ngx-auth-firebaseui-avatar-button" [matMenuTriggerFor]="posXMenu"
-  [matTooltip]="user.displayName ? user.displayName : ''" [style.background-image]="'url(' + user.photoURL + ')'"
-  aria-label="Open x-positioned menu" mat-mini-fab style="background-size: cover">
-  <span *ngIf="!user?.photoURL">{{displayNameInitials || ''}}</span>
-</button>
+<div class="firebase-login">
+<div *ngIf="user" class="avatar">
+  <button class="ngx-auth-firebaseui-avatar-button" [matMenuTriggerFor]="posXMenu"
+    [matTooltip]="user.displayName ? user.displayName : ''" [style.background-image]="'url(' + user.photoURL + ')'"
+    aria-label="Open x-positioned menu" mat-mini-fab style="background-size: cover">
+    <span *ngIf="!user?.photoURL">{{displayNameInitials || ''}}</span>
+  </button>
+</div>
 
 <mat-menu #posXMenu="matMenu" class="before ngx-auth-firebaseui-avatar-menu" xPosition="before">
-  <div fxLayout="row" fxLayout.xs="column" style="padding-left: 10px; padding-right: 10px"
+  <div fxLayout="row" fxLayout.xs="column" style="padding-left: 10px; padding-right: 10px; background: white;"
     [ngStyle]="{ 'padding-top.px': layout === 'default' ? 0 : 10 }">
     <button [style.background-image]="user?.photoURL ? 'url(' + user?.photoURL + ')' : ''" mat-fab
       style="background-size: cover" *ngIf="layout === 'default'">
@@ -18,7 +21,7 @@
     </div>
   </div>
 
-  <div fxFlex="100" fxLayout="column" [ngStyle]="{ 'padding-bottom.px': layout === 'default' ? 0 : 10 } ">
+  <div fxFlex="100" fxLayout="column" [ngStyle]="{ 'padding-bottom.px': layout === 'default' ? 0 : 10, 'background-color': 'white' } ">
     <div *ngFor="let menuItem of links" class="links-menu">
       <button (click)="menuItem?.callback()" mat-menu-item>
         <mat-icon>{{menuItem?.icon}}</mat-icon>
@@ -32,3 +35,4 @@
     </button>
   </div>
 </mat-menu>
+</div>

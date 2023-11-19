@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'liebling';
+    font-weight: 300;
+    src:
+        url('../../assets/fonts/LieblingProLight.eot') format('embedded-opentype'),
+        url('../../assets/fonts/LieblingProLight.ttf') format('truetype'),
+        url('../../assets/fonts/LieblingProLight.woff') format('woff'),
+        url('../../assets/fonts/LieblingProLight.woff2') format('woff2'),
+}
+
+@font-face {
+    font-family: 'liebling';
+    font-weight: 400;
+    src:
+        url('../../assets/fonts/LieblingProMedium.eot') format('embedded-opentype'),
+        url('../../assets/fonts/LieblingProMedium.ttf') format('truetype'),
+        url('../../assets/fonts/LieblingProMedium.woff') format('woff'),
+        url('../../assets/fonts/LieblingProMedium.woff2') format('woff2'),
+}
+
+@font-face {
+    font-family: 'liebling';
+    font-weight: 900;
+    src: url('../../assets/fonts/LieblingProHeavy.eot') format('embedded-opentype'),
+        url('../../assets/fonts/LieblingProHeavy.ttf') format('truetype'),
+        url('../../assets/fonts/LieblingProHeavy.woff') format('woff'),
+        url('../../assets/fonts/LieblingProHeavy.woff2') format('woff2'),
+}

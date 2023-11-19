@@ -1,14 +1,14 @@
-<form class="autocomplete-form">
-    <mat-form-field *ngIf="isGoogleLibrariesLoaded" class="autocomplete-input">
-        <mat-label>Location</mat-label>
-        <input type="text" placeholder="Enter suburb or post code" matInput [formControl]="searchInput"
-            [matAutocomplete]="auto">
-        <mat-error *ngIf="searchInput.hasError('serverError')">{{getErrorMessage()}}</mat-error>
-        <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (click)="selectedLocation.emit(suggestion)" *ngFor="let suggestion of suggestions | async"
-                [value]="suggestion.description">
-                {{suggestion.description}}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
-</form>
+<div class="autocomplete-form" *ngIf="isGoogleLibrariesLoaded">
+    <mat-icon fontIcon="location_on"></mat-icon> 
+    <input (click)="reference.value=''" type="text" placeholder="Location" matInput [formControl]="searchInput"
+        [matAutocomplete]="auto"#reference>
+        <div class="mat-mdc-select-arrow-wrapper"><div class="mat-mdc-select-arrow"><svg viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true" class="ng-tns-c3393473648-3"><path d="M7 10l5 5 5-5z" class="ng-tns-c3393473648-3"></path></svg></div></div>
+    <mat-error *ngIf="searchInput.hasError('serverError')">{{getErrorMessage()}}</mat-error>
+    <mat-autocomplete #auto="matAutocomplete" class="select-panel">
+        <mat-option (click)="useMyLocation.emit(true)" value="My Location">Use My Current Location</mat-option>
+        <mat-option (click)="selectedLocation.emit(suggestion)" *ngFor="let suggestion of suggestions | async"
+            [value]="suggestion.description">
+            {{suggestion.description}}
+        </mat-option>
+    </mat-autocomplete>
+</div>

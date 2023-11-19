@@ -1,5 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from "@angular/core";
-import { Auth, User, onAuthStateChanged, signOut } from '@angular/fire/auth';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
+import { User, signOut } from '@angular/fire/auth';
+import { AuthenticationService } from '../services/authentication.service';
 
 export interface LinkMenuItem {
   text: string;
@@ -9,13 +17,13 @@ export interface LinkMenuItem {
 }
 
 @Component({
-  selector: "auth-firebaseui-avatar",
-  templateUrl: "./auth-firebaseui-avatar.component.html",
-  styleUrls: ["./auth-firebaseui-avatar.component.scss"],
+  selector: 'auth-firebaseui-avatar',
+  templateUrl: './auth-firebaseui-avatar.component.html',
+  styleUrls: ['./auth-firebaseui-avatar.component.scss'],
 })
 export class AuthFirebaseuiAvatarComponent implements OnInit {
   @Input()
-  layout: "default" | "simple" = "default";
+  layout: 'default' | 'simple' = 'default';
 
   @Input()
   canLogout = true;
@@ -33,32 +41,35 @@ export class AuthFirebaseuiAvatarComponent implements OnInit {
   canEditAccount = true;
 
   @Input()
-  textProfile = "Profile";
+  textProfile = 'Profile';
 
   @Input()
-  textSignOut = "Sign Out";
+  textSignOut = 'Sign Out';
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output()
   onSignOut: EventEmitter<void> = new EventEmitter();
-
-  private auth: Auth = inject(Auth);
   user: User | null = null;
   displayNameInitials: string | null = null;
 
-  ngOnInit() {
-    onAuthStateChanged(this.auth, (user) => {
+  constructor(private firebaseService: AuthenticationService) {}
+
+  ngOnInit(): void {
+    this.firebaseService.onAuthStateChanged((user) => {
       if (!user) {
         return;
       }
       this.user = user;
-      this.displayNameInitials = user.displayName ? this.getDisplayNameInitials(user.displayName)
-        : user.email ? user.email[0].toUpperCase() : null;
+      this.displayNameInitials = user.displayName
+        ? this.getDisplayNameInitials(user.displayName)
+        : user.email
+        ? user.email[0].toUpperCase()
+        : null;
     });
   }
 
   openProfile() {
-    console.log("openProfile");
+    console.log('openProfile');
   }
 
   getDisplayNameInitials(displayName: string | null): string | null {
@@ -67,19 +78,12 @@ export class AuthFirebaseuiAvatarComponent implements OnInit {
     }
     const initialsRegExp: RegExpMatchArray = displayName.match(/\b\w/g) || [''];
     const initials = (
-      (initialsRegExp.shift() || "") + (initialsRegExp.pop() || "")
+      (initialsRegExp.shift() || '') + (initialsRegExp.pop() || '')
     ).toUpperCase();
     return initials;
   }
 
   async signOut() {
-    try {
-      await signOut(this.auth);
-      // Sign-out successful.
-      this.onSignOut.emit();
-    } catch (e) {
-      // An error happened.
-      console.error("An error happened while signing out!", e);
-    }
+    this.firebaseService.signOut();
   }
 }

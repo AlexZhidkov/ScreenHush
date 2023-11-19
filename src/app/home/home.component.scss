@@ -1,51 +1,58 @@
-.title {
-    font-size: 1.5rem;
-}
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '../../app/styles/media';
 
-.geolocation-container {
-    display: flex;
-    flex-direction: column;
-}
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+    $typography-config: mat.get-typography-config($theme);
 
-.preferences-container {
-    display: flex;
-    margin: 0.5rem 0.5rem;
+    @if $color-config !=null {
+        $primary-palette: map.get($color-config, 'primary');
+        $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
+        $captionColour: mat.get-color-from-palette($primary-palette, 500-contrast);
 
-    .preferences-inner-container {
-        margin: 1rem 1rem;
-    }
+        .home {
+            display: flex;
+            flex-direction: column;
+            margin-left: 3.75rem;
 
-    .row-element {
-        width: 100%;
-        margin-right: 1rem;
+            .section {
+                color: $textColor;
+                
+                .section-container {
+                    padding-bottom: 1.5rem;
+                }
 
-        @media screen and (min-width: 767px) {
-            max-width: 200px;
+                h1 {
+                    font-size: 1.5rem;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 1.5rem; /* 100% */
+                    letter-spacing: 0.03125rem;
+                    margin: 0;
+                    padding: 0 0.75rem 0.5rem 0rem;
+                }
+
+                span {
+                    color: $captionColour;
+                    font-size: 0.8125rem;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 1.5rem;
+                    letter-spacing: 0.03125rem;
+                }
+            }
+
+            .card-container {
+                display: flex;
+                width: 100%;
+                gap: 1.25rem;
+            }
+
+            @include breakpoint(xl, max) {
+                padding-left: 1rem;
+                margin: 0;
+            }
         }
     }
-}
-
-.card-container {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.activity-card {
-    max-width: 400px;
-    margin-left: 8px;
-    margin-right: 8px;
-}
-
-.activity-header-image {
-    background-size: cover;
-}
-
-.activity-image-container {
-    width: 400px;
-    height: 400px;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
