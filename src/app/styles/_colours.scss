@@ -8,13 +8,12 @@ $primary-palette: (
   700: #034663,
   800: rgba(12, 27, 34, 0.25),
   900: #0C1417,
-  // ... continues to 900
   contrast: (50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: #FAFAFA,
     500: #BDBDBD,
     700: #212f74,
-    // ... continues to 900
+    800: rgba(0, 18, 26, 0.50),
   )
 );

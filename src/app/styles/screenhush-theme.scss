@@ -7,6 +7,7 @@
 @use '../../styles.scss' as root;
 @use '../app.component.scss' as app;
 @use '../login/login.component.scss' as login;
+@use '../activity/activity.component.scss' as activityPage;
 @use '../activity-card/activity-card.component.scss' as activityCard;
 @use '../home/home.component.scss' as home;
 @use '../location-autocomplete/location-autocomplete.component.scss' as autocomplete;
@@ -25,16 +26,15 @@ $ScreenHush-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 // The warn palette is optional (defaults to red).
 $ScreenHush-warn: mat.define-palette(mat.$red-palette);
 
-$ScreenHush-typography-config: mat.define-typography-config(
-  $font-family: 'liebling',
-  $headline-1: mat.define-typography-level(7rem, 7rem, 300, $letter-spacing: -0.05em),
-  $headline-2: mat.define-typography-level(3.5rem, 3.5rem, 400, $letter-spacing: -0.02em),
-  $headline-3: mat.define-typography-level(2.8125rem, 3rem, 400, $letter-spacing: -0.005em),
-  $headline-4: mat.define-typography-level(2.125rem, 2.5rem, 400),
-  $headline-5: mat.define-typography-level(1.5rem, 2rem, 400),
-  $headline-6: mat.define-typography-level(1.5rem, 2rem, 400),
-  $body-1: mat.define-typography-level(1rem, 1rem, 400),
-);
+$ScreenHush-typography-config: mat.define-typography-config($font-family: 'liebling',
+    $headline-1: mat.define-typography-level($font-size: 3rem, $line-height: 3.125rem, $font-weight: 700),
+    $headline-2: mat.define-typography-level(2.5rem, 3.5rem, 400, $letter-spacing: -0.02em),
+    $headline-3: mat.define-typography-level(2, 3rem, 400, $letter-spacing: -0.005em),
+    $headline-4: mat.define-typography-level(1.75, 2.5rem, 400),
+    $headline-5: mat.define-typography-level(1.5rem, 2rem, 400),
+    $headline-6: mat.define-typography-level(1.2rem, 2rem, 400),
+    $body-1: mat.define-typography-level(1rem, 1rem, 400),
+  );
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -51,6 +51,7 @@ $ScreenHush-theme: mat.define-light-theme((color: (primary: $ScreenHush-primary,
 @include root.theme($ScreenHush-theme);
 @include app.theme($ScreenHush-theme);
 @include login.theme($ScreenHush-theme);
+@include activityPage.theme($ScreenHush-theme);
 @include activityCard.theme($ScreenHush-theme);
 @include home.theme($ScreenHush-theme);
 @include autocomplete.theme($ScreenHush-theme);

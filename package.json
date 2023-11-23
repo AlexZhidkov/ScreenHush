@@ -23,6 +23,7 @@
     "@angular/router": "^16.2.0",
     "@angular/service-worker": "^16.2.0",
     "@googlemaps/js-api-loader": "^1.16.2",
+    "angular-star-rating": "^7.0.0",
     "geofire-common": "^6.0.0",
     "marked": "^4.3.0",
     "ngx-drag-scroll": "^16.0.0",
