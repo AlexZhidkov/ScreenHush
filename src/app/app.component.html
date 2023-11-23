@@ -41,7 +41,7 @@
 <div class="app">
   <div class="navbar">
     <div class="navbar-mobile" *ngIf="user">
-      <div class="avatar">
+      <div class="avatar" *ngIf="equalsRoute('/')">
         <span class="username hide-desktop">{{user?.displayName}}</span>
         <auth-firebaseui-avatar [links]="avatarLinks" [canViewAccount]=false (onSignOut)="onSignOut()">
         </auth-firebaseui-avatar>
@@ -49,7 +49,9 @@
 
       <drag-scroll style="width: 100%;height:60px;">
         <div class="mobile-options">
-          <ng-container *ngTemplateOutlet="table"></ng-container>
+          <ng-container *ngIf="equalsRoute('/')">
+            <ng-container *ngTemplateOutlet="table"></ng-container>
+          </ng-container>
         </div>
       </drag-scroll>
     </div>
@@ -60,7 +62,9 @@
           <img class="logo" src="../assets/img/nav-icon.png" />
         </button>
       </div>
-      <ng-container *ngTemplateOutlet="table"></ng-container>
+      <ng-container *ngIf="equalsRoute('/')">
+        <ng-container *ngTemplateOutlet="table"></ng-container>
+      </ng-container>
     </div>
 
     <div class="navbar-right" *ngIf="user">

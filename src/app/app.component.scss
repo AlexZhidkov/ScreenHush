@@ -31,6 +31,8 @@ $icon-map: (
         $barColor: mat.get-color-from-palette($primary-palette, 800);
         $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
         $captionColour: mat.get-color-from-palette($primary-palette, 500-contrast);
+        $backgroundColor: mat.get-color-from-palette($primary-palette, 500);
+        $hoverColour: mat.get-color-from-palette($primary-palette, 800-contrast);
 
         .app {
             margin-left: 3.75rem;
@@ -128,9 +130,14 @@ $icon-map: (
                     .mat-mdc-select-trigger {
                         font-size: 1rem;
                         padding: 0.2rem 0.5rem 0.2rem 2rem;
-                        background: rgba(3, 70, 99, 0.50) !important;
+                        background: $backgroundColor;
                         border: 1px solid rgba(254, 255, 215, 0.10);
                         border-radius: 2rem;
+
+                        
+                        &:hover {
+                            background: $hoverColour;
+                        }
                     }
 
                     .mat-mdc-select-arrow-wrapper {

@@ -44,6 +44,10 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  equalsRoute(route: string) {
+    return this.router.url === route;
+  }
+
   constructor(
     private router: Router,
     private geolocationService: GeolocationService,

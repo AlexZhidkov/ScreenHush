@@ -8,6 +8,7 @@
     $primary-palette: map.get($color-config, 'primary');
     $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
     $borderColor: mat.get-color-from-palette($primary-palette, 600);
+    $hoverColour: mat.get-color-from-palette($primary-palette, 800-contrast);
 
     .autocomplete-form {
       display: flex;
@@ -30,8 +31,8 @@
         max-width: 5rem;
         font-family: "liebling";
 
-        :focus {
-          border-color: transparent !important;
+        &:hover {
+          background: $hoverColour;
         }
       }
 

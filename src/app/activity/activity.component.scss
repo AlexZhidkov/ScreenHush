@@ -1,21 +1,221 @@
-.activity-card {
-    max-width: 400px;
-    margin-left: 8px;
-    margin-right: 8px;
-}
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '../../app/styles/media';
 
-.activity-header-image {
-    background-size: cover;
-}
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+    $typography-config: mat.get-typography-config($theme);
 
-.image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: -1;
-    img {
-        width: 100%;
+    @if $color-config !=null {
+        $primary-palette: map.get($color-config, 'primary');
+        $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
+        $captionColour: mat.get-color-from-palette($primary-palette, 500-contrast);
+
+        .activity-page {
+            color: $textColor;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: -1;
+            height: 40.85rem;
+
+            img {
+                object-fit: cover;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        .share-button {
+            display: flex;
+            width: 2rem;
+            height: 2rem;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 0.125rem;
+            background: rgba(176, 190, 197, 0.55);
+            backdrop-filter: blur(27.5px);
+            font-size: 1.5rem;
+            color: $textColor;
+
+            @include breakpoint(xl, max) {
+                border-radius: 1rem;
+            }
+        }
+
+        .share-bar {
+            display: flex;
+            justify-content: space-between;
+            height: 20rem;
+            padding: 0 3.75rem;
+
+            @include breakpoint(xl, max) {
+                position: absolute;
+                top: 0.75rem;
+                left: 0;
+                right: 0;
+                padding: 0 1rem;
+            }
+
+            .share-right {
+                display: flex;
+                gap: 1rem;
+            }
+        }
+
+        .activity-hero {
+            display: flex;
+            padding: 2rem 3.75rem 1rem 3.75rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.01) 16.15%, rgba(255, 255, 255, 0.01) 62.2%, rgba(255, 255, 255, 0.10) 105.18%);
+            backdrop-filter: blur(37.5px);
+            min-height: 11.8rem;       
+
+            @include breakpoint(xl, max) {
+                margin-top: 20rem;
+                padding: 2rem 1rem 1rem 1rem;
+                flex-direction: column;
+            }
+
+            .activity-description {
+                display: flex;
+                padding-bottom: 1rem;
+                font-weight: 200;
+                font-size: 1rem;
+            }
+
+            .activity-section {
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-end;
+                width: 50%;
+
+                &.left {
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                }
+
+                @include breakpoint(xl, max) {
+                    justify-content: center;
+                    width: 100%;
+                }
+
+                .activity-rating {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+
+                    @include breakpoint(xl, max) {
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        gap: 1.25rem;
+                        width: 100%;
+                    }
+                }
+
+                .divider {
+                    width: 1px;
+                    border-right: 2px solid rgba(250, 250, 250, 0.15);;
+                }
+            }
+
+            .mat-headline-1 {
+                margin-bottom: 0.25rem !important;
+
+                @include breakpoint(xl, max) {
+                   font-size: 2.5rem !important;
+                }
+            }
+        }
+
+        .activity-container {
+            display: flex;
+            flex-direction: row;
+            padding: 1rem 3.75rem 0 3.75rem;
+            font-weight: 200;
+
+            @include breakpoint(xl, max) {
+                padding: 1rem 1rem 0 1rem;
+            }
+           
+            .activity-content {
+                display: flex;
+                flex-direction: column;
+                width: 50%;
+
+                mat-icon {
+                    margin: 0 0.75rem 0 0;
+                }
+
+                @include breakpoint(xl, max) {
+                    width: 100%;
+                    padding-bottom: 1.25rem;
+                    padding-left: 0;
+                }
+
+                .activity-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    margin-bottom: 2rem;
+
+                    .email {
+                        color: var(--light-blue-lighten-4, #B3E5FC);
+                    }
+                }
+            }
+        }
+
+        .cdk-overlay-pane {
+            display: flex;
+            background: transparent;
+            color: white;
+
+            button {
+                border-radius: 0.5rem 0.5rem 0rem 0rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.30);
+                background: rgba(176, 190, 197, 0.25);
+                backdrop-filter: blur(12.5px);
+            }
+        }
+
+        .expansion-panel {
+            font-size: 1rem;
+
+            .mat-expansion-panel {
+                padding: 1rem 0rem;
+                box-shadow: none !important;
+                border-top: 1px solid rgba(250, 250, 250, 0.20);
+
+                p {
+                    padding-top: 1rem;
+                    margin: 0;
+                    color: $captionColour;
+                    font-size: 1rem;
+                    font-style: normal;
+                    font-weight: 200;
+                    line-height: 1.5rem;
+                    letter-spacing: 0.03125rem;
+                }
+
+                &:last-child {
+                    border-bottom: 1px solid rgba(250, 250, 250, 0.20);
+                }
+            }
+
+            .mat-expansion-panel-body {
+                padding-bottom: 0;
+            }
+
+            .mat-expansion-panel-header {
+                font-weight: 500;
+            }
+        }
     }
 }

@@ -44,9 +44,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
 import { ActivityCardComponent } from './activity-card/activity-card.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
+import { BackButtonDirective } from './directives/back-button.directive';
+import { StarRatingModule } from 'angular-star-rating';
 
 @NgModule({
   declarations: [
@@ -58,6 +61,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     ActivityEditComponent,
     LocationAutocompleteComponent,
     ActivityCardComponent,
+    BackButtonDirective,
   ],
   imports: [
     BrowserModule,
@@ -80,6 +84,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
       registrationStrategy: 'registerWhenStable:30000'
     }),
     MarkdownModule.forRoot(),
+    StarRatingModule.forRoot(),
     ClipboardModule,
     MatFormFieldModule,
     MatToolbarModule,
@@ -101,7 +106,8 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     MatSnackBarModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [
     ScreenTrackingService, UserTrackingService
