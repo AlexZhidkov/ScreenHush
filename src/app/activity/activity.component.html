@@ -18,85 +18,86 @@
             </a>
         </div>
     </div>
-    <div class="activity-hero">
-        <div class="activity-section left">
-            <h1 class="mat-headline-1">{{(activityDoc$ | async).title}}</h1>
-            <span class="activity-description">Taking a ferry directly from Circular Quay to Taronga Zoo, located in the
-                suburb of Mosman, is the first
-                unexpected joy of visiting the animal park. Once there, the leisurely trails and opportunity to see some
-                of
-                Australia's distinct wildlife become apparent, as does the striking view of the Harbour Bridge from the
-                seating at the aerial bird show. Advance booking can give you the chance to see koalas up close, or stay
-                overnight and 'camp' in the zoo.</span>
+    <div class="image-container">
+        <img mat-card-image [src]="(activityDoc$ | async).imageUrl" alt="Image">
+    </div>
+    <div class="activity-container">
+        <div class="activity-hero">
+            <div class="activity-section left">
+                <h1 class="mat-headline-1">{{(activityDoc$ | async).title}}</h1>
+                <span class="activity-description">Taking a ferry directly from Circular Quay to Taronga Zoo, located in the
+                    suburb of Mosman, is the first
+                    unexpected joy of visiting the animal park. Once there, the leisurely trails and opportunity to see some
+                    of
+                    Australia's distinct wildlife become apparent, as does the striking view of the Harbour Bridge from the
+                    seating at the aerial bird show. Advance booking can give you the chance to see koalas up close, or stay
+                    overnight and 'camp' in the zoo.</span>
+            </div>
+            <div class="activity-section">
+                <div class="activity-rating">
+                    <star-rating [starType]="'svg'" [rating]="2" labelText="Our Rating"
+                        labelPosition="bottom"></star-rating>
+                    <div class="divider"></div>
+                    <star-rating [starType]="'svg'" [rating]="2" labelText="Community Rating"
+                        labelPosition="bottom"></star-rating>
+                </div>
+            </div>
         </div>
-        <div class="activity-section">
-            <div class="activity-rating">
-                <star-rating [starType]="'svg'" [rating]="2" labelText="Our Rating"
-                    labelPosition="bottom"></star-rating>
-                <div class="divider"></div>
-                <star-rating [starType]="'svg'" [rating]="2" labelText="Community Rating"
-                    labelPosition="bottom"></star-rating>
+        <div class="activity-content">
+            <div class="activity-info-container">
+                <mat-list class="activity-info">
+                    <mat-list-item>
+                        <mat-icon matListItemIcon>location_on</mat-icon>
+                        <span matListItemTitle>{{(activityDoc$ | async).address}}</span>
+                    </mat-list-item>
+    
+                    <mat-list-item>
+                        <mat-icon matListItemIcon>schedule</mat-icon>
+                        <span matListItemTitle>Sunday - Friday <svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"
+                                viewBox="0 0 4 4" fill="none">
+                                <circle cx="2" cy="2" r="2" fill="#FAFAFA" />
+                            </svg> 09:30 - 16:30</span>
+                    </mat-list-item>
+    
+                    <mat-list-item>
+                        <mat-icon matListItemIcon>attach_money</mat-icon>
+                        <span matListItemTitle>From $34.53 per adult</span>
+                    </mat-list-item>
+    
+                    <mat-list-item>
+                        <mat-icon matListItemIcon>mail</mat-icon>
+                        <span class="email" matListItemTitle>test@test.com <svg xmlns="http://www.w3.org/2000/svg" width="4"
+                                height="4" viewBox="0 0 4 4" fill="none">
+                                <circle cx="2" cy="2" r="2" fill="#FAFAFA" />
+                            </svg> 043562462</span>
+                    </mat-list-item>
+                </mat-list>
+    
+                <mat-accordion class="expansion-panel" multi>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-description>
+                                Sydney Taronga Zoo's Aussie Backyard Adventure Tour
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p> Enjoy an in-depth experience of Sydney Taronga Zoo on a guided tour with a zoo guide who
+                            introduces you to Australian native animals including koalas and kangaroos. Learn more than
+                            you could on your own. This small-group tour is limited to ten people and includes admission
+                            tickets to Taronga Zoo.</p>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-description>
+                                30-Minute Sydney Harbour and Olympic Park Helicopter Tour
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p> Enjoy an in-depth experience of Sydney Taronga Zoo on a guided tour with a zoo guide who
+                            introduces you to Australian native animals including koalas and kangaroos. Learn more than
+                            you could on your own. This small-group tour is limited to ten people and includes admission
+                            tickets to Taronga Zoo.</p>
+                    </mat-expansion-panel>
+                </mat-accordion>
             </div>
         </div>
     </div>
-    <div class="activity-container">
-        <div class="activity-content">
-            <mat-list class="activity-info">
-                <mat-list-item>
-                    <mat-icon matListItemIcon>location_on</mat-icon>
-                    <span matListItemTitle>{{(activityDoc$ | async).address}}</span>
-                </mat-list-item>
-
-                <mat-list-item>
-                    <mat-icon matListItemIcon>schedule</mat-icon>
-                    <span matListItemTitle>Sunday - Friday <svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"
-                            viewBox="0 0 4 4" fill="none">
-                            <circle cx="2" cy="2" r="2" fill="#FAFAFA" />
-                        </svg> 09:30 - 16:30</span>
-                </mat-list-item>
-
-                <mat-list-item>
-                    <mat-icon matListItemIcon>attach_money</mat-icon>
-                    <span matListItemTitle>From $34.53 per adult</span>
-                </mat-list-item>
-
-                <mat-list-item>
-                    <mat-icon matListItemIcon>mail</mat-icon>
-                    <span class="email" matListItemTitle>test@test.com <svg xmlns="http://www.w3.org/2000/svg" width="4"
-                            height="4" viewBox="0 0 4 4" fill="none">
-                            <circle cx="2" cy="2" r="2" fill="#FAFAFA" />
-                        </svg> 043562462</span>
-                </mat-list-item>
-            </mat-list>
-
-            <mat-accordion class="expansion-panel" multi>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-description>
-                            Sydney Taronga Zoo's Aussie Backyard Adventure Tour
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <p> Enjoy an in-depth experience of Sydney Taronga Zoo on a guided tour with a zoo guide who
-                        introduces you to Australian native animals including koalas and kangaroos. Learn more than
-                        you could on your own. This small-group tour is limited to ten people and includes admission
-                        tickets to Taronga Zoo.</p>
-                </mat-expansion-panel>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-description>
-                            30-Minute Sydney Harbour and Olympic Park Helicopter Tour
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <p> Enjoy an in-depth experience of Sydney Taronga Zoo on a guided tour with a zoo guide who
-                        introduces you to Australian native animals including koalas and kangaroos. Learn more than
-                        you could on your own. This small-group tour is limited to ten people and includes admission
-                        tickets to Taronga Zoo.</p>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-    </div>
-</div>
-
-<div class="image-container">
-    <img mat-card-image [src]="(activityDoc$ | async).imageUrl" alt="Image">
 </div>
