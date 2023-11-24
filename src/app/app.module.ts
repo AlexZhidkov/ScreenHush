@@ -44,7 +44,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
 import { ActivityCardComponent } from './activity-card/activity-card.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
@@ -75,7 +75,7 @@ import { StarRatingModule } from 'angular-star-rating';
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideFunctions(() => getFunctions()),
+    provideFunctions(() => getFunctions(undefined, 'australia-southeast1')),
     provideStorage(() => getStorage()),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
