@@ -17,6 +17,13 @@
     }
 }
 
+.login-splash {
+    background: url('../src/assets/images/signin-splash.jpg');
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: center;
+}
+
 html,
 body {
     display: flex;

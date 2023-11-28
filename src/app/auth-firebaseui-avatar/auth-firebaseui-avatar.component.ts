@@ -84,6 +84,11 @@ export class AuthFirebaseuiAvatarComponent implements OnInit {
   }
 
   async signOut() {
-    this.firebaseService.signOut();
+    try {
+      await this.firebaseService.signOut();
+      this.onSignOut.emit();
+    } catch (error) {
+      console.log('An error happened while signing out!', error);
+    }
   }
 }

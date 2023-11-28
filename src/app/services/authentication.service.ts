@@ -1,7 +1,20 @@
 import { Injectable, inject } from '@angular/core';
-import { Analytics, logEvent } from '@angular/fire/analytics';
-import { Auth, onAuthStateChanged, signOut, User } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Analytics, logEvent, setUserId } from '@angular/fire/analytics';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  OAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  User,
+} from '@angular/fire/auth';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,16 +23,114 @@ export class AuthenticationService {
   private analytics: Analytics = inject(Analytics);
   private auth: Auth = inject(Auth);
 
-  constructor(private router: Router) {
+  constructor(private dataService: DataService) {}
 
-  }
-
-  logEvent(eventName: string): void {
-    logEvent(this.analytics, eventName);
+  getCurrentUser(): User | null {
+    return this.auth.currentUser;
   }
 
   onAuthStateChanged(callback: (user: User | null) => void): void {
     onAuthStateChanged(this.auth, callback);
+  }
+
+  async signUpWithPassword(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<void> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      this.onSuccess(userCredential.user);
+      return await updateProfile(user, { displayName: name });
+    } catch (error) {
+      console.error('Error signing up:', error);
+      throw error;
+    }
+  }
+
+  async signInWithPassword(email: string, password: string): Promise<User> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      return userCredential.user;
+    } catch (error) {
+      console.error('Error signing in:', error);
+      throw error;
+    }
+  }
+
+  async signInWithProvider(
+    providerName: 'google' | 'facebook' | 'microsoft' | 'apple'
+  ): Promise<User> {
+    let provider;
+    switch (providerName) {
+      case 'google':
+        provider = new GoogleAuthProvider();
+        break;
+      case 'facebook':
+        provider = new FacebookAuthProvider();
+        break;
+      case 'microsoft':
+        provider = new OAuthProvider('microsoft.com');
+        break;
+      case 'apple':
+        provider = new OAuthProvider('apple');
+        break;
+      default:
+        throw new Error('Invalid provider');
+    }
+
+    try {
+      const result = await signInWithPopup(this.auth, provider);
+      this.onSuccess(result.user);
+      return result.user;
+    } catch (error) {
+      console.error('Error signing in with provider:', error);
+      throw error;
+    }
+  }
+
+  async signOut(): Promise<void> {
+    try {
+      await signOut(this.auth);
+    } catch (e) {
+      // An error happened.
+      console.error('An error happened while signing out!', e);
+    }
+  }
+
+  onSuccess(user: User): void {
+    try {
+      setUserId(this.analytics, user.uid);
+      logEvent(this.analytics, 'login', {
+        uid: user.uid,
+        providerId: user.providerData[0].providerId,
+      });
+      this.dataService.updateUser(user);
+    } catch (error) {
+      console.error('Error setting user ID:', error);
+      throw error;
+    }
+  }
+
+  resetPassword(email: string): Promise<void> {
+    const message = 'Password reset email sent. Check your inbox.';
+    console.log(message);
+    // You may want to handle this differently based on your application needs.
+    // For simplicity, I'm logging the message to the console.
+    return sendPasswordResetEmail(this.auth, email);
+  }
+
+  logEvent(eventName: string): void {
+    logEvent(this.analytics, eventName);
   }
 
   contactDeveloper(): void {
@@ -27,16 +138,5 @@ export class AuthenticationService {
     window.open(
       'mailto:azhidkov@gmail.com?subject=Team%20Builder%20App&body=Hi%20Alex,%20Love%20your%20app!'
     );
-  }
-
-  async signOut(): Promise<void> {
-    try {
-      await signOut(this.auth);
-      // Sign-out successful.
-      this.router.navigate(['/']); // Assuming you want to navigate to the home page after sign-out
-    } catch (e) {
-      // An error happened.
-      console.error('An error happened while signing out!', e);
-    }
   }
 }

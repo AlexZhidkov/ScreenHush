@@ -1,0 +1,57 @@
+<!--Create New Account-->
+<div class="share-buttons">
+    <div class="account-header">
+        <mat-card-title>Let's get started</mat-card-title>
+    </div>
+    <form (ngSubmit)="signUpWithPassword()" #signInForm="ngForm" class="form">
+        <input matInput required autocomplete="name" type="text" id="nameCtrl" name="nameCtrl" [(ngModel)]="name"
+            #nameCtrl="ngModel" placeholder="Full Name">
+        <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)">
+            <mat-error *ngIf="nameCtrl.errors?.['required']">
+                Your name is required
+            </mat-error>
+        </div>
+        <input matInput required autocomplete="username" type="text" id="emailCtrl" name="emailCtrl" [(ngModel)]="email"
+            #emailCtrl="ngModel" placeholder="Enter your email address">
+        <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)">
+            <mat-error *ngIf="emailCtrl.errors?.['required']">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="emailCtrl.errors?.['pattern']">
+                Please enter a valid email address
+            </mat-error>
+        </div>
+        <input matInput required autocomplete="current-password" [type]="passwordInputType" id="passwordCtrl"
+            name="passwordCtrl" [(ngModel)]="password" #passwordCtrl="ngModel" placeholder="Password">
+
+        <div *ngIf="passwordCtrl.invalid && (passwordCtrl.dirty || passwordCtrl.touched)">
+            <mat-error *ngIf="passwordCtrl.errors?.['required']">
+                Password is required
+            </mat-error>
+        </div>
+        <div *ngIf="passwordSignUpError" class="errors">
+            <mat-error>
+                {{passwordSignUpErrorMessage}}
+            </mat-error>
+        </div>
+        <button class="login-button orange" [disabled]="!signInForm.form.valid" mat-raised-button type="submit"
+            color="primary">
+            <ng-container *ngIf="!isLoading; else loadingContent">
+                {{ 'Sign Up' }}
+            </ng-container>
+            <ng-template #loadingContent>
+                <img class="spinner" src="../../../assets/images/spinner.gif">
+            </ng-template>
+        </button>
+        <section class="account-footer">
+            <div>
+                Already have an account? <span [routerLink]="'/account/sign-in'" [queryParams]="{ usePassword: true }"
+                    queryParamsHandling="merge" class="action">
+                    Sign in
+                </span>
+            </div>
+            <a href="https://screenhush.com" target="_blank" class="what-is-screenhush"><span>What is Screenhush?</span>
+                <mat-icon>help</mat-icon></a>
+        </section>
+    </form>
+</div>

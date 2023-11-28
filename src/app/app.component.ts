@@ -15,7 +15,7 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent implements OnInit {
   user: User | null = null;
-  title = "ScreenHush";
+  title = 'ScreenHush';
 
   avatarLinks: LinkMenuItem[] = [
     {
@@ -52,27 +52,24 @@ export class AppComponent implements OnInit {
     private router: Router,
     private geolocationService: GeolocationService,
     private filterService: FilterService,
-    private firebaseService: AuthenticationService,
-  ) {
-
-  }
+    private firebaseService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.firebaseService.onAuthStateChanged((user) => {
       if (!user) {
-        return;
+        this.router.navigate(['/account']);
       }
       this.user = user;
     });
   }
 
-  onSignOut(): void {
-    this.firebaseService.logEvent('user_signed_out');
-    this.router.navigate(['/']).then(() => location.reload());
+  onSignOut() {
+    this.router.navigate(['/account']);
   }
 
   onMyLocationSelected(useMyLocation: boolean) {
-    this.filterService.updateData({UseCurrentLocation: true});
+    this.filterService.updateData({ UseCurrentLocation: true });
   }
 
   onLocationSelected(suggestion: AutocompleteResult) {
@@ -85,7 +82,7 @@ export class AppComponent implements OnInit {
           locationResult.longitude,
         ] as Geopoint;
 
-        this.filterService.updateData({Location: location});
+        this.filterService.updateData({ Location: location });
       })
       .catch((error) => {
         // this.geoLocationError = true;

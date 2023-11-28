@@ -1,0 +1,221 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './sign-in/sign-in.component.scss' as sign-in;
+@import '../../app//styles//media';
+
+@mixin theme($theme) {
+    @include sign-in.theme($theme);
+    // Get the color config from the theme.
+    $color-config: mat.get-color-config($theme);
+
+    // Get the primary color palette from the color-config.
+    $primary-palette: map.get($color-config, 'primary');
+
+    .account {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        border-radius: 1rem;
+        height: 23rem;
+
+        .share-buttons {
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 3rem 3.25rem 3rem;
+            gap: 1rem;
+            backdrop-filter: blur(17.5px);
+
+            p {
+                max-width: 23rem;
+            }
+
+            mat-icon {
+                width: 1.25rem;
+                height: 1.25rem;
+                margin-right: 0.88rem;
+            }
+
+            @include breakpoint(md, max) {
+                padding: 2rem 0.62rem 3.25rem 0.62rem;
+            }
+        }
+
+        .what-is-screenhush {
+            display: flex;
+            color: white;
+            text-decoration: none;
+
+            span {
+                padding-right: 0.25rem;
+            }
+        }
+    }
+
+    .account-header {
+        display: flex;
+        justify-content: center;
+        font-size: 2rem;
+        padding: 1.25rem 0rem 1rem 0rem;
+    }
+
+    .account-footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+
+        .action {
+            cursor: pointer
+        }
+
+        mat-icon {
+            width: 1rem;
+            height: 1rem;
+            font-size: 1rem;
+        }
+    }
+
+    .spinner {
+        width: 1.2rem;
+    }
+
+    .landing-logo {
+        position: absolute;
+        top: -10rem;
+        left: -23rem;
+    }
+    
+    .landing-image {
+        position: absolute;
+        width: 10rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.50);
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(2px);
+        padding: 0.75rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.625rem;
+
+        @include breakpoint(md, max) {
+            display: none;
+        }
+
+        &.top-left {
+            top: 2rem;
+            left: -23rem;
+        }
+
+        &.middle-left {
+            width: 5.65219rem;
+            top: 17rem;
+            left: -10rem;
+        }
+
+        &.bottom-left {
+            width: 11.26869rem;
+            top: 30rem;
+            left: -23rem;
+        }
+
+        &.top-right {
+            width: 13.36956rem;
+            top: -6rem;
+            right: -20rem;
+        }
+
+        &.middle-right-upper {
+            width: 4.4565rem;
+            top: 12rem;
+            right: -23rem;
+        }
+
+        &.middle-right-lower {
+            width: 9.62688rem;
+            top: 20rem;
+            right: -16rem;
+        } 
+
+        &.bottom-right {
+            width: 13.75731rem;
+            top: 35rem;
+            right: -25rem;
+        }
+    }
+
+    button.login-button {
+        display: flex;
+        padding: 1rem 1.375rem;
+        width: 23rem;
+        font-size: 1.25rem;
+        font-weight: 500;
+        justify-content: center;
+        align-items: center;
+        align-self: stretch;
+        border-radius: 2.1875rem;
+        color: black;
+        background: #FFF;
+        cursor: pointer;
+        border: none;
+
+        &.apple {
+            background: black;
+            color: white;
+        }
+
+        &.orange {
+            background: var(--custom-warning, #FB8C00);
+            color: white;
+
+            &:disabled {
+                background: lightgray;
+            }
+        }
+
+        @include breakpoint(md, max) {
+            width: 20rem;
+            padding: 0.88rem 1.375rem;
+        }
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .errors {
+            max-width: 23rem;
+        }
+
+        mat-error {
+            color: #FF5252;
+        }
+
+        input {
+            display: flex;
+            padding: 1rem 0rem 1rem 1.5rem;
+            align-items: center;
+            gap: 0.5625rem;
+            border-radius: 2.1875rem;
+            background: var(--blue-grey-darken-4, #263238);
+            backdrop-filter: blur(2px);
+            border: none;
+            color: white;
+            font-family: Liebling;
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.5rem;
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.50);
+            }
+        }
+    }
+}
