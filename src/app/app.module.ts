@@ -9,14 +9,19 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import {
+  provideAnalytics,
+  getAnalytics,
+  ScreenTrackingService,
+  UserTrackingService,
+} from '@angular/fire/analytics';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { AuthFirebaseuiAvatarComponent } from "./auth-firebaseui-avatar/auth-firebaseui-avatar.component";
+import { AuthFirebaseuiAvatarComponent } from './auth-firebaseui-avatar/auth-firebaseui-avatar.component';
 import { HomeComponent } from './home/home.component';
 import { ActivityComponent } from './activity/activity.component';
 import { ActivityEditComponent } from './activity-edit/activity-edit.component';
@@ -49,6 +54,7 @@ import { ActivityCardComponent } from './activity-card/activity-card.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { BackButtonDirective } from './directives/back-button.directive';
 import { StarRatingModule } from 'angular-star-rating';
+import { ShareModule } from 'ngx-sharebuttons';
 
 @NgModule({
   declarations: [
@@ -69,6 +75,8 @@ import { StarRatingModule } from 'angular-star-rating';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    ClipboardModule,
+    ShareModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),
@@ -105,11 +113,10 @@ import { StarRatingModule } from 'angular-star-rating';
     MatChipsModule,
     MatAutocompleteModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatButtonModule
   ],
-  providers: [
-    ScreenTrackingService, UserTrackingService
-  ],
-  bootstrap: [AppComponent]
+  providers: [ScreenTrackingService, UserTrackingService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

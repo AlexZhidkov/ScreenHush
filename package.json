@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.2.0",
-    "@angular/cdk": "^16.2.7",
+    "@angular/cdk": "^16.2.12",
     "@angular/common": "^16.2.0",
     "@angular/compiler": "^16.2.0",
     "@angular/core": "^16.2.0",
@@ -28,6 +28,7 @@
     "marked": "^4.3.0",
     "ngx-drag-scroll": "^16.0.0",
     "ngx-markdown": "^16.0.0",
+    "ngx-sharebuttons": "^13.0.0",
     "rxfire": "6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
