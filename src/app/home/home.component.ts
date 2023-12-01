@@ -52,8 +52,6 @@ export class HomeComponent implements OnDestroy {
             position.coords.latitude,
             position.coords.longitude,
           ] as Geopoint;
-          this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
-
           homeService.getGeoActivitiesBySection(this.center).then((x) => {
             this.homeSection = x;
           });
