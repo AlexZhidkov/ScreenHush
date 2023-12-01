@@ -2,14 +2,14 @@ import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { ScreenHushService } from '../screen-hush.service';
 import { MatChipOption } from '@angular/material/chips';
-import {
-  Geopoint,
-} from 'geofire-common';
+import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '../services/data.service';
 import { HomeSection } from '../model/home-activity-model';
 import { DragScrollComponent } from 'ngx-drag-scroll';
+import { DocumentReference } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -39,7 +39,8 @@ export class HomeComponent implements OnDestroy {
   constructor(
     private shService: ScreenHushService,
     private filterService: FilterService,
-    private homeService: DataService
+    private homeService: DataService,
+    private router: Router,
   ) {
     this.allTags = shService.getAllTags();
 
@@ -51,6 +52,7 @@ export class HomeComponent implements OnDestroy {
             position.coords.latitude,
             position.coords.longitude,
           ] as Geopoint;
+          this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
 
           homeService.getGeoActivitiesBySection(this.center).then((x) => {
             this.homeSection = x;
@@ -90,5 +92,11 @@ export class HomeComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.scrollInterval);
+  }
+
+  createNewActivity() {
+    this.homeService.createNewActivity().then((newActivityReference: DocumentReference) => {
+      this.router.navigate([`edit-activity/${newActivityReference.id}`]);
+    });
   }
 }

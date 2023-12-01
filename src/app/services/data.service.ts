@@ -15,6 +15,7 @@ import {
   docData,
   doc,
   getDoc,
+  addDoc,
   updateDoc,
   setDoc,
 } from '@angular/fire/firestore';
@@ -133,6 +134,10 @@ export class DataService {
   getActivityById(activityId: string): Observable<any> {
     const activityDocRef = doc(this.firestore, 'activities', activityId);
     return docData(activityDocRef, { idField: 'id' }) as Observable<any>;
+  }
+
+  createNewActivity() {
+    return addDoc(this.activitiesCollection, { title: 'New Activity' });
   }
 
   updateUser(user: User) {
