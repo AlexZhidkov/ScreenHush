@@ -26,7 +26,7 @@ export class CanActivateGuard  {
           setUserId(this.analytics, user.uid);
           return true;
         } else {
-          this.router.navigate([`/login`], { queryParams: { redirectUrl: state.url } });
+          this.router.navigate([`/account/sign-in`], { queryParams: { redirectUrl: state.url } });
           return false;
         }
       })
