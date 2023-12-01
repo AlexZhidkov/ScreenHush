@@ -7,10 +7,10 @@
             <a class="share-button">
                 <mat-icon mat-icon-button [matMenuTriggerFor]="menu">share</mat-icon>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item><mat-icon>facebook_custom</mat-icon> Facebook</button>
-                    <button mat-menu-item><mat-icon>instagram_custom</mat-icon> Instagram</button>
-                    <button mat-menu-item><mat-icon>mail</mat-icon> Email</button>
-                    <button mat-menu-item><mat-icon>content_copy</mat-icon> Copy link</button>
+                    <button mat-menu-item shareButton="facebook"><mat-icon svgIcon="facebook_custom"></mat-icon> Facebook</button>
+                    <button mat-menu-item shareButton="twitter"><mat-icon svgIcon="twitter_custom"></mat-icon> Twitter</button>
+                    <button mat-menu-item (click)="sendEmail()"><mat-icon>mail</mat-icon> Send Email</button>
+                    <button mat-menu-item [cdkCopyToClipboard]="copyValue"><mat-icon>content_copy</mat-icon> Copy link</button>
                 </mat-menu>
             </a>
             <a class="share-button">
