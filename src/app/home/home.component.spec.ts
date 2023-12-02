@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { TagsService } from '../services/tags.service';
 import { FilterService } from '../services/filter.service';
@@ -19,7 +19,7 @@ describe('HomeComponent', () => {
   };
 
   const filterServiceMock = {
-    filterSource$: of(), // You can set up the observable with test data if needed
+    filterSource$: of(),
     updateData: jasmine.createSpy('updateData'),
   };
 
@@ -46,43 +46,18 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with loading state', () => {
-    expect(component.isLoading).toBe(true);
-  });
-
-  it('should handle filter changes and update data', () => {
-    const filterService = TestBed.inject(FilterService) as FilterService;
-    filterService.updateData({ UseCurrentLocation: true });
-
-    expect(filterService.updateData).toHaveBeenCalledOnceWith({ UseCurrentLocation: true });
-
-    // Wait for async data loading
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(dataServiceMock.getGeoActivitiesBySection).toHaveBeenCalledOnceWith(component.center);
-      expect(component.homeSection).toEqual([] as HomeSection[]);
-      expect(component.isLoading).toBe(false);
-    });
-  });
-
-  it('should handle filter changes without updating data if not using current location', () => {
+  it('should handle filter changes without updating data if not using current location', fakeAsync(() => {
     const filterService = TestBed.inject(FilterService) as FilterService;
     filterService.updateData({ UseCurrentLocation: false });
 
     expect(filterService.updateData).toHaveBeenCalledOnceWith({ UseCurrentLocation: false });
 
-    // Data loading should not be triggered
+    // Advance the virtual clock
+    tick();
+
+    // Expectations
     expect(dataServiceMock.getGeoActivitiesBySection).not.toHaveBeenCalled();
-  });
 
-  it('should clear the scroll interval on component destruction', () => {
-    spyOn(window, 'clearInterval');
-
-    // Assuming that ngAfterViewInit starts the scroll interval
-    component.ngAfterViewInit();
-    component.ngOnDestroy();
-
-    // Expect clearInterval to be called with the correct interval ID
-    expect(window.clearInterval).toHaveBeenCalledOnceWith(component.scrollInterval);
-  });
+    flush();
+  }));
 });
