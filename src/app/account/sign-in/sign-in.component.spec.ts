@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatCardModule } from '@angular/material/card';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -27,7 +28,7 @@ describe('SignInComponent', () => {
         { provide: MatSnackBar, useValue: snackBarSpy },
         { provide: ActivatedRoute, useValue: { queryParams: of({ usePassword: true }) } },
       ],
-      imports: [FormsModule, RouterTestingModule],
+      imports: [FormsModule, RouterTestingModule, MatCardModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SignInComponent);

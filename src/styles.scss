@@ -87,3 +87,17 @@ body {
     line-height: 1.5rem;
     letter-spacing: 0.03125rem;
 }
+
+//Date picker
+.cdk-overlay-pane.mat-datepicker-dialog .mat-datepicker-content .mat-datepicker-content-container  {
+    mat-calendar {
+        background: whitesmoke;
+    }
+}
+
+//Tags picker
+.cdk-overlay-pane {
+    .mat-mdc-autocomplete-panel {
+        background: white;
+    }
+}

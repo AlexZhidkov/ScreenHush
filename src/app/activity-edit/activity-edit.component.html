@@ -1,5 +1,5 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-<mat-card>
+<mat-card class="activity-edit">
     <mat-card-header>
         <mat-card-title data-cy="activityCardTitle">
             <span *ngIf="isLoading">Loading ...</span>
@@ -7,7 +7,7 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <mat-form-field>
+        <mat-form-field floatLabel="auto">
             <mat-label>Title</mat-label>
             <input matInput name="activityTitle" [ngModel]="activity?.title"
                 (ngModelChange)="updateActivity({title: $event})" data-cy="activityTitle">
@@ -38,6 +38,7 @@
                     data-cy="date">
                 <mat-icon matSuffix>calendar_month</mat-icon>
             </mat-form-field>
+
             <mat-form-field class="row-element">
                 <mat-label>Time</mat-label>
                 <input matInput name="time" [ngModel]="activity?.time" (ngModelChange)="updateActivity({time: $event})"
@@ -53,7 +54,6 @@
                 (ngModelChange)="updateActivity({description: $event})" data-cy="activityDescription">
             </textarea>
         </mat-form-field>
-
         <form>
             <mat-form-field>
                 <mat-label>Tags</mat-label>
@@ -75,7 +75,6 @@
                 </mat-autocomplete>
             </mat-form-field>
         </form>
-
         <img mat-card-xl-image style="height: auto;" [src]="imageUrl" alt="Image">
     </mat-card-content>
     <mat-progress-bar *ngIf="isImageLoading" mode="indeterminate"></mat-progress-bar>

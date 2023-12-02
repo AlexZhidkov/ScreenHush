@@ -16,7 +16,6 @@ export class ActivityComponent {
   activityDoc$!: Observable<any>;
   isLoading = true;
   panelOpenState = false;
-  copyValue = window.location.href;
 
   constructor(
     private homeService: DataService,
@@ -28,17 +27,17 @@ export class ActivityComponent {
     this.matIconRegistry.addSvgIcon(
       'facebook_custom',
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/icons/facebook.svg'
+        'assets/icons/facebook.svg'
       ) as SafeResourceUrl
     );
 
     this.matIconRegistry.addSvgIcon(
       'twitter_custom',
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/icons/twitter.svg'
+        'assets/icons/twitter.svg'
       ) as SafeResourceUrl
     );
-
+    
     this.activityId = this.route.snapshot.paramMap.get('activityId');
 
     if (!this.activityId) {
@@ -51,6 +50,16 @@ export class ActivityComponent {
 
   goBackToPrevPage(): void {
     this.location.back();
+  }
+
+  async shareMore() {
+    const shareData = {
+      title: "ScreenHush",
+      text: "Check out this activity",
+      url: window.location.href
+    };
+
+    await navigator.share(shareData);
   }
 
   sendEmail(): void {

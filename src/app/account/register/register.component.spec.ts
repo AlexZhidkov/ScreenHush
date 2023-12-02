@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
@@ -8,6 +7,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input'; 
+import { MatCardModule } from '@angular/material/card';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -26,7 +26,7 @@ describe('RegisterComponent', () => {
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: { queryParams: of({ email: 'test@example.com' }) } },
       ],
-      imports: [FormsModule, RouterTestingModule, MatIconModule, MatInputModule ],
+      imports: [FormsModule, RouterTestingModule, MatIconModule, MatInputModule, MatCardModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);

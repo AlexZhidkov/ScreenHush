@@ -1,8 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { Analytics, logEvent } from '@angular/fire/analytics';
 import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
-import { DocumentData, DocumentReference, Firestore, doc, onSnapshot, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, onSnapshot } from '@angular/fire/firestore';
 import { Storage, ref, uploadString, getDownloadURL } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +10,8 @@ import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { ScreenHushService } from '../screen-hush.service';
+import { TagsService } from '../services/tags.service';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -20,8 +20,6 @@ import { ScreenHushService } from '../screen-hush.service';
 })
 export class ActivityEditComponent {
   private auth: Auth = inject(Auth);
-  private firestore: Firestore = inject(Firestore);
-  private analytics: Analytics = inject(Analytics);
   private storage: Storage = inject(Storage);
   user: User | null = null;
   activityId: string | null = null;
@@ -42,20 +40,22 @@ export class ActivityEditComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private service: ScreenHushService,
+    private tagsService: TagsService,
     private router: Router,
     private snackBar: MatSnackBar,
+    private dataService: DataService
   ) {
     this.activityId = this.route.snapshot.paramMap.get('activityId');
     if (!this.activityId) {
       console.error('Activity ID is falsy');
       return;
     }
-    this.allTags = service.getAllTags();
+    this.allTags = tagsService.getAllTags();
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),
     );
+
     onAuthStateChanged(this.auth, async (user) => {
       if (!user) {
         console.error('User object is falsy');
@@ -63,7 +63,8 @@ export class ActivityEditComponent {
       }
       this.user = user;
     });
-    this.activityRef = doc(this.firestore, 'activities', this.activityId as string);
+    this.activityRef = this.dataService.getActivityDoc(this.activityId);
+
     onSnapshot(this.activityRef, async (activitySnapshot) => {
       this.isLoading = false;
       this.activity = activitySnapshot.data();
@@ -79,20 +80,18 @@ export class ActivityEditComponent {
     });
   }
 
-  updateActivity(data: any) {
-    updateDoc(this.activityRef as DocumentReference<DocumentData>, data)
+  updateActivity(data: DocumentData) {
+    this.dataService.updateActivity(this.activityRef, data);
   }
 
-  deleteActivity(): void {
-    logEvent(this.analytics, 'delete_activity', { uid: this.user?.uid, activityId: this.activityId })
-    if (!this.activityRef) {
-      console.error("deleteActivity: falsy activityRef");
-      return;
+  async deleteActivity(): Promise<void> {
+    try {
+      await this.dataService.deleteActivity(this.activityId as string, this.user?.uid, this.activityRef);
+      this.router.navigate([`/`]);
+    } catch (error) {
+      console.error('Error deleting activity:', error);
+      // Handle error if needed
     }
-    deleteDoc(this.activityRef)
-      .then(() => {
-        this.router.navigate([`/`])
-      });
   }
 
   async onImageSelected(event: Event) {
@@ -171,10 +170,13 @@ export class ActivityEditComponent {
   // Tags section
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value) {
+    const tagExists = this.tags.includes(value);
+
+    if (value && !tagExists) {
       this.tags.push(value);
       this.updateActivity({ tags: this.tags });
     }
+    
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
   }
@@ -202,5 +204,4 @@ export class ActivityEditComponent {
     return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
   }
   // Tags section - end
-
 }

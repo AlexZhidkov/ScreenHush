@@ -2,8 +2,8 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { StarRatingModule, StarRatingConfigService } from 'angular-star-rating';
+import { MatIconModule } from '@angular/material/icon';
+import { StarRatingConfigService, StarRatingModule } from 'angular-star-rating';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { ActivityComponent } from './activity.component';
@@ -11,22 +11,14 @@ import { DataService } from '../services/data.service';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockStarRatingConfigService {
   // You can add mock implementations here if needed
-}
-
-class MockMatIconRegistry {
-  getNamedSvgIcon(name: string, namespace: string): Observable<SVGElement> {
-    // Your implementation, you might return a mocked SVGElement
-    return of(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
-  }
-  addSvgIcon(iconName: string, sanitizer: DomSanitizer) {
-    // Mock implementation
-  }
-  getDefaultFontSetClass() {
-    return 'mat-font-icon';
-  }
 }
 
 describe('ActivityComponent', () => {
@@ -36,19 +28,45 @@ describe('ActivityComponent', () => {
 
   beforeEach(async () => {
     mockDataService = jasmine.createSpyObj('DataService', ['getActivityById']);
-    mockDataService.getActivityById.and.returnValue(of({ /* mock activity data */ }));
+    mockDataService.getActivityById.and.returnValue(
+      of({
+        /* mock activity data */
+      })
+    );
 
     await TestBed.configureTestingModule({
       declarations: [ActivityComponent],
-      imports: [MatMenuModule, MatIconModule, StarRatingModule, MatListModule, MatExpansionModule, BrowserAnimationsModule],
+      imports: [
+        MatCardModule,
+        MatMenuModule,
+        MatIconModule,
+        StarRatingModule,
+        MatListModule,
+        MatExpansionModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MatIconTestingModule,
+        RouterTestingModule,
+      ],
       providers: [
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => '123' } } } },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => '123' } } },
+        },
         { provide: DataService, useValue: mockDataService },
         { provide: Location, useValue: { back: () => {} } },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        { provide: DomSanitizer, useClass: class { bypassSecurityTrustResourceUrl() {} } },
-        { provide: StarRatingConfigService, useClass: MockStarRatingConfigService },
+        {
+          provide: DomSanitizer,
+          useValue: {
+            bypassSecurityTrustResourceUrl: (url: string) => url,
+          },
+        },
+        {
+          provide: StarRatingConfigService,
+          useClass: MockStarRatingConfigService,
+        },
       ],
+      schemas: [NO_ERRORS_SCHEMA], // Add this line to ignore unknown elements
     }).compileComponents();
   });
 
@@ -71,9 +89,9 @@ describe('ActivityComponent', () => {
   it('should navigate back when goBackToPrevPage is called', () => {
     const location = TestBed.inject(Location);
     const locationBackSpy = spyOn(location, 'back');
-    
+
     component.goBackToPrevPage();
-    
+
     expect(locationBackSpy).toHaveBeenCalled();
   });
 

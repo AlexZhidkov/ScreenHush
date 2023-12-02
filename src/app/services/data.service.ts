@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { FilterOptionsRequest } from '../model/filter-options';
 import { Observable, Subject } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
@@ -18,9 +18,13 @@ import {
   addDoc,
   updateDoc,
   setDoc,
+  DocumentReference,
+  DocumentData,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Activity } from '../model/activity';
 import { User } from '@angular/fire/auth';
+import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +35,7 @@ export class DataService {
   activitiesCollection: CollectionReference;
   filterSource$ = this.filterSource.asObservable();
 
-  constructor() {
+  constructor(private analyticsService: AnalyticsService) {
     this.activitiesCollection = collection(this.firestore, 'activities');
   }
 
@@ -134,6 +138,26 @@ export class DataService {
   getActivityById(activityId: string): Observable<any> {
     const activityDocRef = doc(this.firestore, 'activities', activityId);
     return docData(activityDocRef, { idField: 'id' }) as Observable<any>;
+  }
+
+  getActivityDoc(activityId: string): DocumentReference<DocumentData> {
+    return doc(this.firestore, 'activities', activityId);
+  }
+  
+  async deleteActivity(activityId: string, userId: string | undefined, activityRef: DocumentReference<DocumentData>): Promise<void> {
+    try {
+      await deleteDoc(activityRef);
+      this.analyticsService.logEvent('delete_activity', { uid: userId, activityId: activityId });
+      console.log('Activity deleted successfully');
+      // You can add additional logic here if needed.
+    } catch (error) {
+      console.error('Error deleting activity:', error);
+      throw error;
+    }
+  }
+
+  updateActivity(activityDoc: DocumentReference<DocumentData>, data: DocumentData) {
+    updateDoc(activityDoc as DocumentReference<DocumentData>, data)
   }
 
   createNewActivity() {
