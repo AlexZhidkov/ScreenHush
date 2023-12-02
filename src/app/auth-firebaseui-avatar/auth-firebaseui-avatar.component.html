@@ -9,17 +9,17 @@
   </div>
 
   <mat-menu #posXMenu="matMenu" class="before ngx-auth-firebaseui-avatar-menu" xPosition="before">
-    <div fxLayout="row" fxLayout.xs="column">
-      <button [style.background-image]="user?.photoURL ? 'url(' + user?.photoURL + ')' : ''" mat-fab
+    <div class="row">
+      <button class="avatar-button" [style.background-image]="user?.photoURL ? 'url(' + user?.photoURL + ')' : ''" mat-fab
         style="background-size: cover" *ngIf="layout === 'default'">
         <span *ngIf="!user?.photoURL">{{displayNameInitials || ''}}</span>
       </button>
-      <div fxLayout="column" style="padding-left: 10px; padding-right: 10px">
+      <div class="profile">
         <strong mat-card-title>{{user?.displayName}}</strong>
         <em mat-card-subtitle style="font-style: italic">{{user?.email}}</em>
       </div>
     </div>
-
+    <mat-divider></mat-divider>
     <div>
       <div *ngFor="let menuItem of links" class="links-menu">
         <button (click)="menuItem?.callback()" mat-menu-item>
@@ -29,9 +29,13 @@
       <button *ngIf="canViewAccount" (click)="openProfile()" color="primary" fxLayoutAlign="center" mat-raised-button>{{
         textProfile }}
       </button>
-      <button (click)="signOut()" *ngIf="canLogout" color="warn" fxLayoutAlign="center" mat-raised-button>{{ textSignOut
-        }}
-      </button>
+      <div class="links-menu">
+        <button class="sign-out" (click)="signOut()" *ngIf="canLogout" color="warn" fxLayoutAlign="center"
+          mat-raised-button>{{ textSignOut
+          }}
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
     </div>
   </mat-menu>
 </div>

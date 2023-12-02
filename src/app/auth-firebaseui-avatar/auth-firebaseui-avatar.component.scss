@@ -12,13 +12,9 @@
     margin: 0.2rem 1rem;
   }
 
-  .links-menu {
-    text-align: center;
+  button {
+    border-radius: 3.125rem;
   }
-}
-
-.mat-mdc-menu-panel {
-  background: white !important;
 }
 
 .firebase-username {
@@ -29,14 +25,66 @@
   }
 }
 
-.ngx-auth-firebaseui-avatar-menu {
-  background: #034663;
-}
+::ng-deep .ngx-auth-firebaseui-avatar-menu {
+  display: flex;
+  color: white;
+  background: rgba(3, 70, 99, 0.75);
 
-.links-menu {
-  background: #034663;
-  
+  mat-icon {
+    font-size: 1.5rem;
+  }
+
+  mat-divider {
+    color: var(--black-012, rgba(0, 0, 0, 0.12));
+  }
+
+  .avatar-button {
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.625rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    gap: 1rem;
+    background: rgba(3, 70, 99, 0.75);
+    box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.25);
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   button {
-    background: #034663;
+    background: rgba(3, 70, 99, 0.75);
+    box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.25);
+
+    &:hover {
+      background: rgb(1, 50, 71) !important;
+    }
+
+    &.sign-out {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      background: rgba(3, 70, 99, 0.75);
+      box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.25);
+      color: var(--custom-error, #FF5252);
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
   }
 }
