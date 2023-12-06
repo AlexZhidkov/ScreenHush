@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ScreenHushService } from './screen-hush.service';
+import { TagsService } from './tags.service';
 
 describe('ScreenHushService', () => {
-  let service: ScreenHushService;
+  let service: TagsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ScreenHushService);
+    service = TestBed.inject(TagsService);
   });
 
   it('should be created', () => {

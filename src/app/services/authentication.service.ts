@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-import { Analytics, logEvent, setUserId } from '@angular/fire/analytics';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -15,15 +14,15 @@ import {
   User,
 } from '@angular/fire/auth';
 import { DataService } from './data.service';
+import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private analytics: Analytics = inject(Analytics);
   private auth: Auth = inject(Auth);
 
-  constructor(private dataService: DataService) {}
+  constructor(private analyticsService: AnalyticsService, private dataService: DataService) {}
 
   getCurrentUser(): User | null {
     return this.auth.currentUser;
@@ -109,11 +108,12 @@ export class AuthenticationService {
 
   onSuccess(user: User): void {
     try {
-      setUserId(this.analytics, user.uid);
-      logEvent(this.analytics, 'login', {
+      this.analyticsService.setUserId(user.uid);
+      this.analyticsService.logEvent('login', {
         uid: user.uid,
         providerId: user.providerData[0].providerId,
       });
+
       this.dataService.updateUser(user);
     } catch (error) {
       console.error('Error setting user ID:', error);
@@ -127,16 +127,5 @@ export class AuthenticationService {
     // You may want to handle this differently based on your application needs.
     // For simplicity, I'm logging the message to the console.
     return sendPasswordResetEmail(this.auth, email);
-  }
-
-  logEvent(eventName: string): void {
-    logEvent(this.analytics, eventName);
-  }
-
-  contactDeveloper(): void {
-    this.logEvent('email_developer');
-    window.open(
-      'mailto:azhidkov@gmail.com?subject=Team%20Builder%20App&body=Hi%20Alex,%20Love%20your%20app!'
-    );
   }
 }

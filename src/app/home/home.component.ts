@@ -1,6 +1,6 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { User } from '@angular/fire/auth';
-import { ScreenHushService } from '../screen-hush.service';
+import { TagsService } from '../services/tags.service';
 import { MatChipOption } from '@angular/material/chips';
 import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
@@ -37,7 +37,7 @@ export class HomeComponent implements OnDestroy {
   scrollInterval: any;
 
   constructor(
-    private shService: ScreenHushService,
+    private shService: TagsService,
     private filterService: FilterService,
     private homeService: DataService,
     private router: Router,

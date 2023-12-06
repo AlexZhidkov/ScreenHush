@@ -7,12 +7,14 @@ import { FilterService } from './services/filter.service';
 import { Geopoint } from 'geofire-common';
 import { User } from '@angular/fire/auth';
 import { AuthenticationService } from './services/authentication.service';
+import { AnalyticsService } from './services/analytics.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
+
 export class AppComponent implements OnInit {
   user: User | null = null;
   title = 'ScreenHush';
@@ -36,7 +38,7 @@ export class AppComponent implements OnInit {
       icon: 'mail',
       text: `Contact the developer`,
       callback: () => {
-        this.firebaseService.logEvent('email_developer');
+        this.analyticsService.logEvent('email_developer');
         window.open(
           'mailto:azhidkov@gmail.com?subject=Team%20Builder%20App&body=Hi%20Alex,%20Love%20your%20app!'
         );
@@ -52,6 +54,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private geolocationService: GeolocationService,
     private filterService: FilterService,
+    private analyticsService: AnalyticsService,
     private firebaseService: AuthenticationService
   ) {}
 

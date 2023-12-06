@@ -3,9 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './reset-password.component';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { of } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
@@ -21,7 +21,7 @@ describe('ResetPasswordComponent', () => {
         { provide: AuthenticationService, useValue: authServiceSpy },
         { provide: MatSnackBar, useValue: {} },
       ],
-      imports: [FormsModule, MatInputModule, MatButtonModule],
+      imports: [FormsModule, MatInputModule, MatButtonModule, MatCardModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ResetPasswordComponent);

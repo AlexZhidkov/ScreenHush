@@ -1,19 +1,30 @@
-mat-card {
-    color: white;
-}
-
-mat-form-field {
-    width: 100%;
-}
-
-#row {
+.activity-edit {
     display: flex;
-    justify-content: space-around;
-    flex-flow: row wrap;
-    align-items: stretch;
-}
+    color: white;
 
-.row-element {
-    width: auto;
-    flex-grow: 1;
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    mat-form-field {
+        padding: 1rem 0;
+
+        input {
+            margin-top: 1rem;
+        }
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    form {
+        display: flex;
+
+        mat-form-field {
+            width: 100%;
+        }
+    }
 }

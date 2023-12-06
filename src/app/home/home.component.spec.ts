@@ -1,11 +1,13 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
-import { ScreenHushService } from '../screen-hush.service';
+import { TagsService } from '../services/tags.service';
 import { FilterService } from '../services/filter.service';
 import { DataService } from '../services/data.service';
 import { of } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -28,9 +30,9 @@ describe('HomeComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [HomeComponent],
-      imports: [MatProgressBarModule],
+      imports: [MatProgressBarModule, MatCardModule, MatIconModule],
       providers: [
-        { provide: ScreenHushService, useValue: screenHushServiceMock },
+        { provide: TagsService, useValue: screenHushServiceMock },
         { provide: FilterService, useValue: filterServiceMock },
         { provide: DataService, useValue: dataServiceMock },
       ],

@@ -1,15 +1,112 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Auth } from '@angular/fire/auth';
+import { Storage } from '@angular/fire/storage';
+import { Observable, from, of } from 'rxjs';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ActivityEditComponent } from './activity-edit.component';
+import { TagsService } from '../services/tags.service';
+import { DataService } from '../services/data.service';
+
+const activatedRouteSnapshot: ActivatedRouteSnapshot = {
+  url: [],
+  params: {},
+  queryParams: {},
+  fragment: null,
+  data: {},
+  outlet: 'primary',
+  component: null,
+  routeConfig: null,
+  get title() { return 'Your Title'; },
+  get root() { return activatedRouteSnapshot; },
+  get parent() { return null; },
+  get firstChild() { return null; },
+  get children() { return []; },
+  get pathFromRoot() { return [activatedRouteSnapshot]; },
+  get paramMap() { return convertToParamMap({}); },
+  get queryParamMap() { return convertToParamMap({}); },
+  toString: () => 'Your Snapshot String',
+};
 
 describe('ActivityEditComponent', () => {
   let component: ActivityEditComponent;
   let fixture: ComponentFixture<ActivityEditComponent>;
+  let mockActivatedRoute: Partial<ActivatedRoute>;
+  let mockRouter: Partial<Router>;
+  let mockMatSnackBar: Partial<MatSnackBar>;
+  let mockMatIconRegistry: Partial<MatIconRegistry>;
+  let mockDomSanitizer: Partial<DomSanitizer>;
+  let mockTagsService: Partial<TagsService>;
+  let mockDataService: Partial<DataService>;
+  let mockLiveAnnouncer: Partial<LiveAnnouncer>;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
+    const authMock = {};
+    const storageMock = {};
+
+    mockRouter = { navigate: jasmine.createSpy('navigate') };
+    mockMatSnackBar = { open: jasmine.createSpy('open') };
+    mockDomSanitizer = { bypassSecurityTrustResourceUrl: (url: string) => url };
+    mockTagsService = { getAllTags: () => ['tag1', 'tag2'] };
+    mockDataService = {
+      getActivityDoc: jasmine.createSpy('getActivityDoc').and.returnValue({
+        onSnapshot: (callback: any) => callback({ data: () => ({}) }),
+      }),
+      updateActivity: jasmine.createSpy('updateActivity'),
+      deleteActivity: jasmine.createSpy('deleteActivity').and.returnValue(Promise.resolve()),
+    };
+    mockLiveAnnouncer = { announce: jasmine.createSpy('announce') };
+
     TestBed.configureTestingModule({
-      declarations: [ActivityEditComponent]
-    });
+      declarations: [ActivityEditComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule, // Import ReactiveFormsModule
+        FormsModule,
+        RouterTestingModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatProgressBarModule
+      ],
+      providers: [
+        { provide: Auth, useValue: authMock },
+        { provide: Storage, useValue: storageMock },
+        { provide: ActivatedRoute, useValue: {
+            params: from([{id: 1}]),
+            paramMap: of(convertToParamMap({id: 1})),
+            snapshot: activatedRouteSnapshot,
+          },
+        },
+        { provide: Router, useValue: mockRouter },
+        { provide: MatSnackBar, useValue: mockMatSnackBar },
+        { provide: DomSanitizer, useValue: mockDomSanitizer },
+        { provide: TagsService, useValue: mockTagsService },
+        { provide: DataService, useValue: mockDataService },
+        { provide: LiveAnnouncer, useValue: mockLiveAnnouncer },
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ActivityEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -18,4 +115,47 @@ describe('ActivityEditComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should add tag on chip input event', () => {
+    const event: MatChipInputEvent = { input: null, value: 'newTag' } as any;
+    component.add(event);
+
+    expect(component.tags).toContain('newTag');
+    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
+      tags: component.tags,
+    });
+  });
+
+  it('should remove tag', () => {
+    component.tags = ['existingTag'];
+    const event: MatAutocompleteSelectedEvent = {
+      option: { viewValue: 'existingTag' },
+    } as any;
+    component.remove('existingTag');
+
+    expect(component.tags).toEqual([]);
+    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
+      tags: component.tags,
+    });
+    expect(mockLiveAnnouncer.announce).toHaveBeenCalledWith(
+      `Removed existingTag`
+    );
+  });
+
+  it('should select tag from autocomplete', () => {
+    component.tags = [];
+    const event: MatAutocompleteSelectedEvent = {
+      option: { viewValue: 'selectedTag' },
+    } as any;
+    component.selected(event);
+
+    expect(component.tags).toEqual(['selectedTag']);
+    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
+      tags: component.tags,
+    });
+    expect(component.tagInput.nativeElement.value).toBe('');
+    expect(component.tagCtrl.setValue).toHaveBeenCalledWith(null);
+  });
+
+  // Add more tests as needed for other methods and functionality
 });

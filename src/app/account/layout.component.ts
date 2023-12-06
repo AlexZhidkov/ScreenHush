@@ -9,13 +9,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class LayoutComponent {
   pageTitle: string = "Let's get started";
   imgs = new Array();
-  
+
   constructor(
-    private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer,
-    private renderer: Renderer2
+    protected _iconRegistry: MatIconRegistry,
+    protected sanitizer: DomSanitizer,
+    protected _renderer: Renderer2
   ) {
-    this.iconRegistry
+    this._iconRegistry
       .addSvgIcon(
         'google',
         this.sanitizer.bypassSecurityTrustResourceUrl('/assets/mdi/google.svg')
@@ -47,12 +47,23 @@ export class LayoutComponent {
   }
 
   ngOnInit(): void {
-    this.pload('/assets/images/signin-splash.jpg', '/assets/images/spinner.gif');
-  
-    this.renderer.addClass(document.body, 'login-splash');
+    this.pload(
+      '/assets/images/signin-splash.jpg',
+      '/assets/images/spinner.gif'
+    );
+
+    this._renderer.addClass(document.body, 'login-splash');
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(document.body, 'login-splash');
+    this._renderer.removeClass(document.body, 'login-splash');
+  }
+
+  renderer(): Renderer2 {
+    return this._renderer;
+  }
+
+  iconRegistry(): MatIconRegistry {
+    return this._iconRegistry;
   }
 }

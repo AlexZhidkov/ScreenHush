@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatIconModule } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticationService } from './services/authentication.service';
 import { mockUser } from './mocks/mock-user';
 import { AuthFirebaseuiAvatarComponent } from './auth-firebaseui-avatar/auth-firebaseui-avatar.component';
@@ -12,14 +11,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
+import { AnalyticsService } from './services/analytics.service';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
-  let mockFirebaseService: jasmine.SpyObj<AuthenticationService>;
+  let mockAuthenticationService: jasmine.SpyObj<AuthenticationService>;
+  let mockAnalyticsService: jasmine.SpyObj<AnalyticsService>;
 
   beforeEach(() => {
-    mockFirebaseService = jasmine.createSpyObj('FirebaseService', [
+    mockAuthenticationService = jasmine.createSpyObj('FirebaseService', [
       'onAuthStateChanged',
       'logEvent',
     ]);
@@ -28,7 +29,7 @@ describe('AppComponent', () => {
       declarations: [AppComponent, AuthFirebaseuiAvatarComponent, LocationAutocompleteComponent],
       imports: [RouterTestingModule, MatIconModule, DragScrollModule, MatMenuModule, MatChipsModule, MatSelectModule ],
       providers: [
-        { provide: AuthenticationService, useValue: mockFirebaseService },
+        { provide: AuthenticationService, useValue: mockAuthenticationService }, { provide: AnalyticsService, useValue: mockAnalyticsService },
       ],
     });
 
