@@ -40,9 +40,9 @@
 
 <div class="app">
   <div class="navbar">
-    <div class="navbar-mobile" *ngIf="user">
+    <div class="navbar-mobile" *ngIf="currentUser">
       <div class="avatar" *ngIf="equalsRoute('/')">
-        <span class="username hide-desktop">{{user?.displayName}}</span>
+        <span class="username hide-desktop">{{currentUser?.displayName}}</span>
         <auth-firebaseui-avatar [links]="avatarLinks" [canViewAccount]=false (onSignOut)="onSignOut()">
         </auth-firebaseui-avatar>
       </div>
@@ -56,7 +56,7 @@
       </drag-scroll>
     </div>
 
-    <div class="navbar-left" *ngIf="user">
+    <div class="navbar-left" *ngIf="currentUser">
       <div class="logo-container">
         <button class="logo" mat-icon-button [routerLink]="['/']" data-cy="homeBtn">
           <img class="logo" src="../assets/img/nav-icon.png" />
@@ -67,7 +67,7 @@
       </ng-container>
     </div>
 
-    <div class="navbar-right" *ngIf="user">
+    <div class="navbar-right" *ngIf="currentUser">
       <button mat-icon-button>
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="shopping_bag"></mat-icon>
       </button>
@@ -75,7 +75,7 @@
       <button mat-icon-button><mat-icon aria-hidden="false" aria-label="Example home icon"
           fontIcon="sort"></mat-icon></button>
 
-      <button mat-icon-button> <mat-icon aria-hidden="false" aria-label="Example home icon"
+      <button mat-icon-button routerLink="/favourites"> <mat-icon aria-hidden="false" aria-label="Example home icon"
           fontIcon="favorite"></mat-icon></button>
 
       <button mat-icon-button> <mat-icon aria-hidden="false" aria-label="Example home icon"
@@ -93,7 +93,7 @@
           home</mat-icon>
         <span>Home</span>
       </button>
-      <button routerLink="/top-tracks" routerLinkActive="active-link">
+      <button routerLink="/favourites" routerLinkActive="active-link">
         <mat-icon class="material-icons color_blue">favorite_border
         </mat-icon>
         <span>Favourites</span>

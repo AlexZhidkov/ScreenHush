@@ -1,4 +1,4 @@
-import { inject, Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FilterOptionsRequest } from '../model/filter-options';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
@@ -14,23 +14,21 @@ import {
   startAt,
   docData,
   doc,
-  getDoc,
   addDoc,
   updateDoc,
-  setDoc,
   DocumentReference,
   DocumentData,
   deleteDoc,
+  getDoc,
 } from '@angular/fire/firestore';
 import { Functions, httpsCallableData } from '@angular/fire/functions';
 import { Activity } from '../model/activity';
-import { User } from '@angular/fire/auth';
 import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DataService {
+export class ActivitiesService {
   private firestore: Firestore = inject(Firestore);
   private functions: Functions = inject(Functions);
   private filterSource = new Subject<FilterOptionsRequest>();
@@ -195,29 +193,5 @@ export class DataService {
 
   createNewActivity() {
     return addDoc(this.activitiesCollection, { title: 'New Activity' });
-  }
-
-  updateUser(user: User) {
-    const dbUserRef = doc(this.firestore, 'users', user.uid);
-
-    getDoc(dbUserRef)
-      .then((doc) => {
-        if (doc.exists()) {
-          const dbUser = doc.data();
-          if (!dbUser['photoURL']) {
-            updateDoc(dbUserRef, { photoURL: user.photoURL });
-          }
-        } else {
-          setDoc(dbUserRef, {
-            uid: user.uid,
-            displayName: user.displayName ?? user.displayName,
-            email: user.email ?? user.email,
-            photoURL: user.photoURL,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error('Error setting user ID:', error);
-      });
   }
 }

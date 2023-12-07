@@ -14,9 +14,9 @@
                     <button mat-menu-item (click)="shareMore()"><mat-icon>send</mat-icon> More</button>
                 </mat-menu>
             </a>
-            <a class="share-button">
-                <mat-icon matListItemIcon>favorite</mat-icon>
-            </a>
+            <button class="share-button" (click)="toggleFavourite()">
+                <mat-icon matListItemIcon>{{ isFavoured ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
             <a class="share-button" [routerLink]="['/edit-activity', (activityDoc$ | async).id]">
                 <mat-icon matListItemIcon>edit</mat-icon>
             </a>

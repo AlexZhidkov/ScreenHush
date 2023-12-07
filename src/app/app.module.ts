@@ -55,6 +55,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
 import { BackButtonDirective } from './directives/back-button.directive';
 import { StarRatingModule } from 'angular-star-rating';
 import { ShareModule } from 'ngx-sharebuttons';
+import { FavouritesComponent } from './favourites/favourites.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ShareModule } from 'ngx-sharebuttons';
     LocationAutocompleteComponent,
     ActivityCardComponent,
     BackButtonDirective,
+    FavouritesComponent,
   ],
   imports: [
     BrowserModule,

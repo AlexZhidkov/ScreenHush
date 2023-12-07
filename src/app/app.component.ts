@@ -14,9 +14,8 @@ import { AnalyticsService } from './services/analytics.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-
 export class AppComponent implements OnInit {
-  user: User | null = null;
+  currentUser: User | null = null;
   title = 'ScreenHush';
 
   avatarLinks: LinkMenuItem[] = [
@@ -40,7 +39,7 @@ export class AppComponent implements OnInit {
       callback: () => {
         this.analyticsService.logEvent('email_developer');
         window.open(
-          'mailto:azhidkov@gmail.com?subject=ScreenHush%20App&body=Hi%20Alex,%20Love%20your%20app!'
+          'mailto:azhidkov@gmail.com?subject=Team%20Builder%20App&body=Hi%20Alex,%20Love%20your%20app!'
         );
       },
     },
@@ -55,15 +54,15 @@ export class AppComponent implements OnInit {
     private geolocationService: GeolocationService,
     private filterService: FilterService,
     private analyticsService: AnalyticsService,
-    private firebaseService: AuthenticationService
-  ) { }
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
-    this.firebaseService.onAuthStateChanged((user) => {
+    this.authService.onAuthStateChanged((user) => {
       if (!user) {
         this.router.navigate(['/account']);
       }
-      this.user = user;
+      this.currentUser = user;
     });
   }
 

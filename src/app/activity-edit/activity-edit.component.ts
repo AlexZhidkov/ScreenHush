@@ -11,7 +11,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TagsService } from '../services/tags.service';
-import { DataService } from '../services/data.service';
+import { ActivitiesService } from '../services/activities.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -43,7 +43,7 @@ export class ActivityEditComponent {
     private tagsService: TagsService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dataService: DataService
+    private activitiesService: ActivitiesService
   ) {
     this.activityId = this.route.snapshot.paramMap.get('activityId');
     if (!this.activityId) {
@@ -63,7 +63,7 @@ export class ActivityEditComponent {
       }
       this.user = user;
     });
-    this.activityRef = this.dataService.getActivityDoc(this.activityId);
+    this.activityRef = this.activitiesService.getActivityDoc(this.activityId);
 
     onSnapshot(this.activityRef, async (activitySnapshot) => {
       this.isLoading = false;
@@ -81,12 +81,12 @@ export class ActivityEditComponent {
   }
 
   updateActivity(data: DocumentData) {
-    this.dataService.updateActivity(this.activityRef, data);
+    this.activitiesService.updateActivity(this.activityRef, data);
   }
 
   async deleteActivity(): Promise<void> {
     try {
-      await this.dataService.deleteActivity(this.activityId as string, this.user?.uid, this.activityRef);
+      await this.activitiesService.deleteActivity(this.activityId as string, this.user?.uid, this.activityRef);
       this.router.navigate([`/`]);
     } catch (error) {
       console.error('Error deleting activity:', error);

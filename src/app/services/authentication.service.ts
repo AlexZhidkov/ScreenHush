@@ -13,16 +13,26 @@ import {
   updateProfile,
   User,
 } from '@angular/fire/auth';
-import { DataService } from './data.service';
 import { AnalyticsService } from './analytics.service';
+import { UsersService } from './users.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
+  currentUser: User | null = null;
   private auth: Auth = inject(Auth);
 
-  constructor(private analyticsService: AnalyticsService, private dataService: DataService) {}
+  private authStatusSub = new BehaviorSubject(this.currentUser);
+  currentAuthStatus = this.authStatusSub.asObservable();
+  
+  constructor(
+    private analyticsService: AnalyticsService,
+    private usersService: UsersService
+  ) {
+    this.authStatusListener();
+  }
 
   getCurrentUser(): User | null {
     return this.auth.currentUser;
@@ -30,6 +40,19 @@ export class AuthenticationService {
 
   onAuthStateChanged(callback: (user: User | null) => void): void {
     onAuthStateChanged(this.auth, callback);
+  }
+
+  authStatusListener() {
+    this.auth.onAuthStateChanged((credential) => {
+      if (credential) {
+        console.log(credential);
+        this.authStatusSub.next(credential);
+        console.log('User is logged in');
+      } else {
+        this.authStatusSub.next(null);
+        console.log('User is logged out');
+      }
+    });
   }
 
   async signUpWithPassword(
@@ -99,6 +122,7 @@ export class AuthenticationService {
 
   async signOut(): Promise<void> {
     try {
+      console.log("attempting signout");
       await signOut(this.auth);
     } catch (e) {
       // An error happened.
@@ -114,7 +138,7 @@ export class AuthenticationService {
         providerId: user.providerData[0].providerId,
       });
 
-      this.dataService.updateUser(user);
+      this.usersService.updateUser(user);
     } catch (error) {
       console.error('Error setting user ID:', error);
       throw error;

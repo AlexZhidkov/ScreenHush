@@ -5,11 +5,11 @@ import { MatChipOption } from '@angular/material/chips';
 import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
 import { Subscription } from 'rxjs';
-import { DataService } from '../services/data.service';
 import { HomeSection } from '../model/home-activity-model';
 import { DragScrollComponent } from 'ngx-drag-scroll';
 import { DocumentReference } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { ActivitiesService } from '../services/activities.service';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +40,7 @@ export class HomeComponent implements OnDestroy {
   constructor(
     private shService: TagsService,
     private filterService: FilterService,
-    private homeService: DataService,
+    private activitiesService: ActivitiesService,
     private router: Router,
   ) {
     this.allTags = shService.getAllTags();
@@ -53,8 +53,7 @@ export class HomeComponent implements OnDestroy {
             position.coords.latitude,
             position.coords.longitude,
           ] as Geopoint;
-          // this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
-          homeService.getGeoActivitiesBySection(this.center).then((x) => {
+          activitiesService.getGeoActivitiesBySection(this.center).then((x) => {
             this.homeSection = x;
           });
         });
@@ -75,7 +74,7 @@ export class HomeComponent implements OnDestroy {
           position.coords.longitude,
         ] as Geopoint;
 
-        homeService.getGeoActivitiesBySection(this.center).then((x: HomeSection[]) => {
+        activitiesService.getGeoActivitiesBySection(this.center).then((x: HomeSection[]) => {
           this.homeSection = x;
           this.isLoading = false;
         });
@@ -95,7 +94,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   createNewActivity() {
-    this.homeService.createNewActivity().then((newActivityReference: DocumentReference) => {
+    this.activitiesService.createNewActivity().then((newActivityReference: DocumentReference) => {
       this.router.navigate([`edit-activity/${newActivityReference.id}`]);
     });
   }
@@ -103,7 +102,7 @@ export class HomeComponent implements OnDestroy {
   search() {
     if (!this.searchPrompt) { return }
     this.isLoading = true;
-    this.homeService.search(this.searchPrompt).then((x: HomeSection[]) => {
+    this.activitiesService.search(this.searchPrompt).then((x: HomeSection[]) => {
       this.homeSection = x;
       this.isLoading = false;
       this.searchPrompt = null

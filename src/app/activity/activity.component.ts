@@ -1,28 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DataService } from '../services/data.service';
+import { FavouritesService } from '../services/favourites.service';
+import { Auth, User } from '@angular/fire/auth';
+import { ActivitiesService } from '../services/activities.service';
 
 @Component({
   selector: 'app-activity',
   templateUrl: './activity.component.html',
   styleUrls: ['./activity.component.scss']
 })
-export class ActivityComponent {
+export class ActivityComponent implements OnInit  {
   activityId: string | null = null;
   activityDoc$!: Observable<any>;
+  isFavoured: boolean;
   isLoading = true;
   panelOpenState = false;
-
+  user: User;
+  private auth: Auth = inject(Auth);
+  
   constructor(
-    private homeService: DataService,
+    private activitiesService: ActivitiesService,
     private route: ActivatedRoute,
     private location: Location,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private favouritesService: FavouritesService
   ) {
     this.matIconRegistry.addSvgIcon(
       'facebook_custom',
@@ -45,9 +51,13 @@ export class ActivityComponent {
       return;
     }
 
-    this.activityDoc$ = this.homeService.getActivityById(this.activityId);
+    this.activityDoc$ = this.activitiesService.getActivityById(this.activityId);
   }
 
+  async ngOnInit(): Promise<void> {
+    this.isFavoured = await this.favouritesService.isActivityFavorited(this.activityId);
+  }
+  
   goBackToPrevPage(): void {
     this.location.back();
   }
@@ -67,5 +77,14 @@ export class ActivityComponent {
     const subject = encodeURIComponent(`Checkout this activity: ${currentURL}`);
     const mailtoLink = `mailto:?subject=${subject}`;
     window.location.href = mailtoLink;
+  }
+
+  async toggleFavourite() {
+    if (this.isFavoured) {
+      this.favouritesService.removeFromFavourites(this.activityId);
+    } else {
+      this.favouritesService.addToFavourites(this.activityId);
+    }
+    this.isFavoured = !this.isFavoured;
   }
 }
