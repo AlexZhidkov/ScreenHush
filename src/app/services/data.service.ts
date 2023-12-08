@@ -1,6 +1,6 @@
 import { inject, Injectable, Injector } from '@angular/core';
 import { FilterOptionsRequest } from '../model/filter-options';
-import { Observable, Subject } from 'rxjs';
+import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
 import { distanceBetween, geohashQueryBounds, Geopoint } from 'geofire-common';
 import {
@@ -22,6 +22,7 @@ import {
   DocumentData,
   deleteDoc,
 } from '@angular/fire/firestore';
+import { Functions, httpsCallableData } from '@angular/fire/functions';
 import { Activity } from '../model/activity';
 import { User } from '@angular/fire/auth';
 import { AnalyticsService } from './analytics.service';
@@ -31,6 +32,7 @@ import { AnalyticsService } from './analytics.service';
 })
 export class DataService {
   private firestore: Firestore = inject(Firestore);
+  private functions: Functions = inject(Functions);
   private filterSource = new Subject<FilterOptionsRequest>();
   activitiesCollection: CollectionReference;
   filterSource$ = this.filterSource.asObservable();
@@ -135,6 +137,37 @@ export class DataService {
     return homeModel;
   }
 
+  async search(query: string): Promise<HomeSection[]> {
+    const promises: any[] = [];
+    const search = httpsCallableData(this.functions, 'ext-firestore-semantic-search-queryIndex');
+    const searchData = await firstValueFrom(search({ "query": [query] })) as any;
+    searchData.data.nearestNeighbors.forEach((nearestNeighbor: any) => {
+      nearestNeighbor.neighbors.forEach((neighbor: any) => {
+        promises.push(getDoc(doc(this.firestore, 'activities', neighbor.datapoint.datapointId)));
+      });
+    });
+
+    var foundActivities = await Promise.all(promises).then((snapshots) => {
+      let allActivities = [];
+      for (const doc of snapshots) {
+        const activity = doc.data() as any;
+        activity.id = doc.id;
+        allActivities.push(activity);
+      }
+      return allActivities;
+    });
+
+    const homeModel: HomeSection[] = [
+      {
+        category: 'Search',
+        tags: [],
+        items: foundActivities,
+      }
+    ];
+
+    return homeModel;
+  }
+
   getActivityById(activityId: string): Observable<any> {
     const activityDocRef = doc(this.firestore, 'activities', activityId);
     return docData(activityDocRef, { idField: 'id' }) as Observable<any>;
@@ -143,7 +176,7 @@ export class DataService {
   getActivityDoc(activityId: string): DocumentReference<DocumentData> {
     return doc(this.firestore, 'activities', activityId);
   }
-  
+
   async deleteActivity(activityId: string, userId: string | undefined, activityRef: DocumentReference<DocumentData>): Promise<void> {
     try {
       await deleteDoc(activityRef);

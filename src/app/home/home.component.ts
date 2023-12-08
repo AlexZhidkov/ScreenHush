@@ -35,6 +35,7 @@ export class HomeComponent implements OnDestroy {
   radiusInMeters = 5 * 1000;
   subscription: Subscription;
   scrollInterval: any;
+  searchPrompt: string | null = null;
 
   constructor(
     private shService: TagsService,
@@ -52,6 +53,7 @@ export class HomeComponent implements OnDestroy {
             position.coords.latitude,
             position.coords.longitude,
           ] as Geopoint;
+          // this.center = [-34.055209, 151.009268] as Geopoint; // Sydney
           homeService.getGeoActivitiesBySection(this.center).then((x) => {
             this.homeSection = x;
           });
@@ -95,6 +97,16 @@ export class HomeComponent implements OnDestroy {
   createNewActivity() {
     this.homeService.createNewActivity().then((newActivityReference: DocumentReference) => {
       this.router.navigate([`edit-activity/${newActivityReference.id}`]);
+    });
+  }
+
+  search() {
+    if (!this.searchPrompt) { return }
+    this.isLoading = true;
+    this.homeService.search(this.searchPrompt).then((x: HomeSection[]) => {
+      this.homeSection = x;
+      this.isLoading = false;
+      this.searchPrompt = null
     });
   }
 }

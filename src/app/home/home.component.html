@@ -17,6 +17,14 @@
 
 <mat-card style="color: white;">
     <mat-card-actions>
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input matInput type="text" [(ngModel)]="searchPrompt" (keyup.enter)="search()">
+            <button *ngIf="searchPrompt" matSuffix mat-icon-button aria-label="search" (click)="search()">
+                <mat-icon>search</mat-icon>
+            </button>
+        </mat-form-field>
+
         <button mat-raised-button color="accent" (click)="createNewActivity()" data-cy="createNewActivityBtn">
             <mat-icon inline=true>add_circle</mat-icon>
             Create New Activity
