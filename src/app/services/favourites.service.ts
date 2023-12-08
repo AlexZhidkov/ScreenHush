@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { CollectionReference, Firestore, addDoc, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
-import { collection } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, setDoc, arrayUnion, arrayRemove, updateDoc, DocumentReference, DocumentData } from '@angular/fire/firestore';
 import { User } from '@angular/fire/auth';
 import { AuthenticationService } from './authentication.service';
 import { Activity } from '../model/activity';
@@ -11,8 +10,7 @@ import { Activity } from '../model/activity';
 export class FavouritesService {
   private firestore: Firestore = inject(Firestore);
   private currentUser: User | null;
-  
-  favouritesCollection: CollectionReference;
+  private userDocRef: DocumentReference<DocumentData>;
 
   constructor(private authService: AuthenticationService) {
     this.setupAuthStatusListener();
@@ -22,103 +20,72 @@ export class FavouritesService {
     // Subscribe to the authStatusSub BehaviorSubject in the AuthenticationService
     this.authService.currentAuthStatus.subscribe((user) => {
       this.currentUser = user;
-      // Do something with the user or perform actions when the authentication state changes
-      // Update favouritesCollection when the authentication state changes
-      const userUid = this.currentUser?.uid;
 
-      this.favouritesCollection = userUid
-      ? collection(this.firestore, 'users', userUid, 'favourites')
-      : (null as unknown as CollectionReference);
+      if (user) {
+        this.userDocRef = doc(this.firestore, 'users', user.uid);
+      }
     });
+    
   }
 
   async isActivityFavorited(activityId: string | null): Promise<boolean> {
     if (this.currentUser && activityId) {
-      const queryRef = query(this.favouritesCollection, where('activityId', '==', activityId));
-      const querySnapshot = await getDocs(queryRef);
-      return !querySnapshot.empty;
+      const userDocSnapshot = await getDoc(this.userDocRef);
+      const favorites = userDocSnapshot.get('favorites') || [];
+  
+      return favorites.includes(activityId);
     } else {
       console.error('User not logged in or activityId is null');
       return false;
     }
   }
+  
 
-  async getFavouriteActivities() : Promise<Activity[]> {
-    if (this.currentUser) {
-      const userUid = this.currentUser?.uid;
-
-      if (userUid) {
-        const favouritesCollectionRef = collection(this.firestore, 'users', userUid, 'favourites');
-        const queryRef = query(favouritesCollectionRef);
-
-        try {
-          const querySnapshot = await getDocs(queryRef);
-
-          // Get the activity IDs from the favourite documents
-          const activityIds = querySnapshot.docs.map((doc) => doc.get('activityId'));
-
-          // Retrieve detailed information about the activities from the "activities" collection
-          const favouriteActivities = await Promise.all(
-            activityIds.map(async (activityId) => {
-              const activityDocRef = doc(this.firestore, 'activities', activityId);
-              const activityDocSnapshot = await getDoc(activityDocRef);
-
-              if (activityDocSnapshot.exists()) {
-                return { id: activityId, ...activityDocSnapshot.data() };
-              } else {
-                console.warn(`Activity with ID ${activityId} not found`);
-                return null;
-              }
-            })
-          );
-
-          // Filter out any null values (activities not found)
-          const filteredFavouriteActivities = favouriteActivities.filter(
-            (activity): activity is Activity => activity !== null
-          );
-
-          return filteredFavouriteActivities;
-        } catch (error) {
-          console.error('Error retrieving favorite activities:', error);
-        }
-      } else {
-        console.error('User UID is null');
-      }
-    } else {
+  async getFavouriteActivities(): Promise<Activity[]> {
+    if (!this.currentUser) {
       console.error('User not logged in');
+      return [];
     }
 
-    return []; // Return an empty array if there is an error or user is not logged in
+    const userDocSnapshot = await getDoc(this.userDocRef);
+    const favorites = userDocSnapshot.get('favorites') || [];
+
+    // Retrieve detailed information about the activities from the "activities" collection
+    const favouriteActivities = await Promise.all(
+      favorites.map(async (activityId: string) => {
+        const activityDocRef = doc(this.firestore, 'activities', activityId);
+        const activityDocSnapshot = await getDoc(activityDocRef);
+
+        if (activityDocSnapshot.exists()) {
+          return { id: activityId, ...activityDocSnapshot.data() };
+        } else {
+          console.warn(`Activity with ID ${activityId} not found`);
+          return null;
+        }
+      })
+    );
+
+    // Filter out any null values (activities not found)
+    const filteredFavouriteActivities = favouriteActivities.filter(
+      (activity): activity is Activity => activity !== null
+    );
+
+    return filteredFavouriteActivities;
   }
 
   async addToFavourites(activityId: string | null) {
-    if (this.currentUser) {
-      const queryRef = query(this.favouritesCollection, where('activityId', '==', activityId));
-      const querySnapshot = await getDocs(queryRef);
-    
-      console.log(querySnapshot);
-
-      if (querySnapshot.empty) {
-        await addDoc(this.favouritesCollection, { activityId: activityId });
-      }
+    if (this.userDocRef) {
+      await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
     } else {
-      console.error('User not logged in');
+      console.error('User not logged in or activityId is null');
     }
   }
 
   async removeFromFavourites(activityId: string | null) {
-    if (this.currentUser) {
-      const queryRef = query(this.favouritesCollection, where('activityId', '==', activityId));
-      const querySnapshot = await getDocs(queryRef);
-  
-      if (!querySnapshot.empty) {
-        // Assuming there's only one matching document; you may need to adjust based on your data model
-        const docId = querySnapshot.docs[0].id;
-        const docRef = doc(this.favouritesCollection, docId);
-        await deleteDoc(docRef);
-      }
+    if (this.userDocRef) {
+      await setDoc(this.userDocRef, { favorites: arrayRemove(activityId) }, { merge: true });
     } else {
-      console.error('User not logged in');
+      console.error('User not logged in or activityId is null');
     }
   }
 }
