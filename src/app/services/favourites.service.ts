@@ -29,15 +29,13 @@ export class FavouritesService {
   }
 
   async isActivityFavorited(activityId: string | null): Promise<boolean> {
-    if (this.currentUser && activityId) {
-      const userDocSnapshot = await getDoc(this.userDocRef);
-      const favorites = userDocSnapshot.get('favorites') || [];
-  
-      return favorites.includes(activityId);
-    } else {
-      console.error('User not logged in or activityId is null');
-      return false;
+    if (!this.currentUser && !activityId) {
+      throw new Error('User not logged in or activityId is null');
     }
+
+    const userDocSnapshot = await getDoc(this.userDocRef);
+    const favorites = userDocSnapshot.get('favorites') || [];
+    return favorites.includes(activityId);
   }
   
 
@@ -75,18 +73,20 @@ export class FavouritesService {
   }
 
   async addToFavourites(activityId: string | null) {
+    if (!this.userDocRef) {
+      throw new Error('User not logged in or activityId is null');
+    }
+
     if (this.userDocRef) {
       await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
-    } else {
-      console.error('User not logged in or activityId is null');
     }
   }
 
   async removeFromFavourites(activityId: string | null) {
-    if (this.userDocRef) {
-      await setDoc(this.userDocRef, { favorites: arrayRemove(activityId) }, { merge: true });
-    } else {
-      console.error('User not logged in or activityId is null');
+    if (!this.userDocRef) {
+      throw new Error('User not logged in or activityId is null');
     }
+
+    await setDoc(this.userDocRef, { favorites: arrayRemove(activityId) }, { merge: true });
   }
 }
