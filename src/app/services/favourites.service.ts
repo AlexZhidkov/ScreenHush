@@ -59,7 +59,8 @@ export class FavouritesService {
         if (activityDocSnapshot.exists()) {
           return { id: activityId, ...activityDocSnapshot.data() };
         } else {
-          console.warn(`Activity with ID ${activityId} not found`);
+          console.warn(`Activity with ID ${activityId} not found, removing`);
+          this.removeFromFavourites(activityId);
           return null;
         }
       })
