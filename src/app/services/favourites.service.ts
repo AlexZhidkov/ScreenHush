@@ -11,6 +11,7 @@ export class FavouritesService {
   private firestore: Firestore = inject(Firestore);
   private currentUser: User | null;
   private userDocRef: DocumentReference<DocumentData>;
+  private userFavoritesCache: string[];
 
   constructor(private authService: AuthenticationService) {
     this.setupAuthStatusListener();
@@ -18,26 +19,31 @@ export class FavouritesService {
 
   private setupAuthStatusListener() {
     // Subscribe to the authStatusSub BehaviorSubject in the AuthenticationService
-    this.authService.currentAuthStatus.subscribe((user) => {
+    this.authService.currentAuthStatus.subscribe(async (user) => {
       this.currentUser = user;
 
-      if (user) {
-        this.userDocRef = doc(this.firestore, 'users', user.uid);
+      if (this.currentUser) {
+        this.userDocRef = doc(this.firestore, 'users', this.currentUser.uid);
       }
     });
-    
+  }
+
+  private async loadFavouritesInCache() {
+    const userDocSnapshot = getDoc(this.userDocRef);
+    this.userFavoritesCache = (await userDocSnapshot).get('favorites') || [];
   }
 
   async isActivityFavorited(activityId: string | null): Promise<boolean> {
-    if (!this.currentUser && !activityId) {
+    if (!this.currentUser || activityId === null) {
       throw new Error('User not logged in or activityId is null');
     }
 
-    const userDocSnapshot = await getDoc(this.userDocRef);
-    const favorites = userDocSnapshot.get('favorites') || [];
-    return favorites.includes(activityId);
+    if (!this.userFavoritesCache) {
+      await this.loadFavouritesInCache();
+    }
+
+    return this.userFavoritesCache.includes(activityId);
   }
-  
 
   async getFavouriteActivities(): Promise<Activity[]> {
     if (!this.currentUser) {
@@ -76,7 +82,7 @@ export class FavouritesService {
     if (!this.userDocRef) {
       throw new Error('User not logged in or activityId is null');
     }
-    
+
     await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
   }
 
