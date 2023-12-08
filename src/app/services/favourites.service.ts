@@ -76,10 +76,8 @@ export class FavouritesService {
     if (!this.userDocRef) {
       throw new Error('User not logged in or activityId is null');
     }
-
-    if (this.userDocRef) {
-      await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
-    }
+    
+    await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
   }
 
   async removeFromFavourites(activityId: string | null) {
