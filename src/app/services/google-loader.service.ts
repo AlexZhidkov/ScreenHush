@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Loader } from '@googlemaps/js-api-loader';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class GoogleLoaderService {
 
   constructor() {
     this.loader = new Loader({
-      apiKey: "[APIKEY]",
+      apiKey: environment.googleMapsApiKey,
       version: "weekly",
       libraries: ["places", "geocoding"]
     });
