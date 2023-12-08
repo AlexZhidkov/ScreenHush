@@ -15,6 +15,7 @@ export class FavouritesService {
 
   constructor(private authService: AuthenticationService) {
     this.setupAuthStatusListener();
+    this.loadFavouritesInCache();
   }
 
   private setupAuthStatusListener() {
