@@ -18,6 +18,13 @@ export class FavouritesService {
     this.loadFavouritesInCache();
   }
 
+  private removeFromCache(activityId: string) {
+    const index = this.userFavoritesCache.indexOf(activityId);
+    if (index !== -1) {
+      this.userFavoritesCache.splice(index, 1);
+    }
+  }
+
   private setupAuthStatusListener() {
     // Subscribe to the authStatusSub BehaviorSubject in the AuthenticationService
     this.authService.currentAuthStatus.subscribe(async (user) => {
@@ -39,7 +46,7 @@ export class FavouritesService {
       throw new Error('User not logged in or activityId is null');
     }
 
-    if (!this.userFavoritesCache) {
+    if (!this.userFavoritesCache || this.userFavoritesCache.length === 0) {
       await this.loadFavouritesInCache();
     }
 
@@ -80,18 +87,20 @@ export class FavouritesService {
   }
 
   async addToFavourites(activityId: string | null) {
-    if (!this.userDocRef) {
+    if (!this.userDocRef || activityId === null) {
       throw new Error('User not logged in or activityId is null');
     }
 
     await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
+    this.userFavoritesCache.push(activityId);
   }
 
   async removeFromFavourites(activityId: string | null) {
-    if (!this.userDocRef) {
+    if (!this.userDocRef || activityId === null) {
       throw new Error('User not logged in or activityId is null');
     }
 
     await setDoc(this.userDocRef, { favorites: arrayRemove(activityId) }, { merge: true });
+    this.removeFromCache(activityId);
   }
 }
