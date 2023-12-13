@@ -10,6 +10,7 @@
 @use '../activity/activity.component.scss' as activityPage;
 @use '../activity-card/activity-card.component.scss' as activityCard;
 @use '../home/home.component.scss' as home;
+@use '../home-section/home-section.component.scss' as homeSection;
 @use '../location-autocomplete/location-autocomplete.component.scss' as autocomplete;
 @use '../styles/typography';
 
@@ -54,5 +55,6 @@ $ScreenHush-theme: mat.define-light-theme((color: (primary: $ScreenHush-primary,
 @include activityPage.theme($ScreenHush-theme);
 @include activityCard.theme($ScreenHush-theme);
 @include home.theme($ScreenHush-theme);
+@include homeSection.theme($ScreenHush-theme);
 @include autocomplete.theme($ScreenHush-theme);
 @include mat.typography-hierarchy($ScreenHush-typography-config);

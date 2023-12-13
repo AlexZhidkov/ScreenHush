@@ -1,5 +1,14 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, doc, getDoc, setDoc, arrayUnion, arrayRemove, updateDoc, DocumentReference, DocumentData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  doc,
+  getDoc,
+  setDoc,
+  arrayUnion,
+  arrayRemove,
+  DocumentReference,
+  DocumentData,
+} from '@angular/fire/firestore';
 import { User } from '@angular/fire/auth';
 import { AuthenticationService } from './authentication.service';
 import { Activity } from '../model/activity';
@@ -52,13 +61,11 @@ export class FavouritesService {
   async getFavouriteActivities(): Promise<Activity[]> {
     if (!this.currentUser) {
       console.error('User not logged in');
-      return [];
+      return Promise.resolve([]);
     }
-
+    
     const userDocSnapshot = await getDoc(this.userDocRef);
     const favorites = userDocSnapshot.get('favorites') || [];
-
-    // Retrieve detailed information about the activities from the "activities" collection
     const favouriteActivities = await Promise.all(
       favorites.map(async (activityId: string) => {
         const activityDocRef = doc(this.firestore, 'activities', activityId);
@@ -87,7 +94,11 @@ export class FavouritesService {
       throw new Error('User not logged in or activityId is null');
     }
 
-    await setDoc(this.userDocRef, { favorites: arrayUnion(activityId) }, { merge: true });
+    await setDoc(
+      this.userDocRef,
+      { favorites: arrayUnion(activityId) },
+      { merge: true }
+    );
     this.userFavoritesCache.push(activityId);
   }
 
@@ -96,7 +107,11 @@ export class FavouritesService {
       throw new Error('User not logged in or activityId is null');
     }
 
-    await setDoc(this.userDocRef, { favorites: arrayRemove(activityId) }, { merge: true });
+    await setDoc(
+      this.userDocRef,
+      { favorites: arrayRemove(activityId) },
+      { merge: true }
+    );
     this.removeFromCache(activityId);
   }
 }

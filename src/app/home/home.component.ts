@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { TagsService } from '../services/tags.service';
 import { MatChipOption } from '@angular/material/chips';
@@ -6,19 +6,17 @@ import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
 import { Subscription } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
-import { DragScrollComponent } from 'ngx-drag-scroll';
 import { DocumentReference } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ActivitiesService } from '../services/activities.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnDestroy {
-  @ViewChild('nav', { read: DragScrollComponent }) ds: DragScrollComponent;
-
+export class HomeComponent {
   isLoading: boolean = true;
   geoLocationError = false;
   user: User | null = null;
@@ -34,16 +32,20 @@ export class HomeComponent implements OnDestroy {
   center: Geopoint = [0, 0];
   radiusInMeters = 5 * 1000;
   subscription: Subscription;
-  scrollInterval: any;
   searchPrompt: string | null = null;
+  isMobile: boolean;
 
   constructor(
-    private shService: TagsService,
+    private tagsService: TagsService,
     private filterService: FilterService,
     private activitiesService: ActivitiesService,
     private router: Router,
+    private deviceService: DeviceDetectorService
   ) {
-    this.allTags = shService.getAllTags();
+    this.allTags = tagsService.getAllTags();
+
+
+    this.getDeviceInformation();
 
     this.subscription = filterService.filterSource$.subscribe((filter) => {
       if (filter.UseCurrentLocation) {
@@ -82,15 +84,8 @@ export class HomeComponent implements OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
-    this.scrollInterval = setInterval(() => {
-      console.log('init!');
-      this.ds.moveRight();
-    }, 5000);
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.scrollInterval);
+  getDeviceInformation() {
+    this.isMobile = this.deviceService.isMobile();
   }
 
   createNewActivity() {

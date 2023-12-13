@@ -1,0 +1,19 @@
+<div class="section" (mouseenter)="displayScrollButtons()" (mouseleave)="hideScrollButtons()">
+    <div class="section-header">
+        <h1 headline-5>{{section.category}}</h1>
+        <span *ngFor="let tag of section.tags">{{tag}}</span>
+    </div>
+
+    <drag-scroll #nav (dragStart)="dragStart()" [drag-disabled]="true">
+        <div class="card-container">
+            <mat-card drag-scroll-item class="activity-card" *ngFor="let activity of section.items">
+                <app-activity-card [activity]="activity" *ngIf="activity.imageUrl !==undefined"></app-activity-card>
+            </mat-card>
+        </div>
+    </drag-scroll>
+
+    <div *ngIf="enableScrollButtons && showScrollButtons">
+        <div class="scroll-button left" (click)="moveLeft()"><mat-icon fxFlexAlign="center"> arrow_back_ios</mat-icon></div>
+        <div class="scroll-button right" (click)="moveRight()"><mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon></div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FavouritesService } from '../services/favourites.service';
-import { Auth, User } from '@angular/fire/auth';
+import { User } from '@angular/fire/auth';
 import { ActivitiesService } from '../services/activities.service';
 
 @Component({
@@ -20,7 +20,6 @@ export class ActivityComponent implements OnInit  {
   isLoading = true;
   panelOpenState = false;
   user: User;
-  private auth: Auth = inject(Auth);
   
   constructor(
     private activitiesService: ActivitiesService,

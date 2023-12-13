@@ -1,17 +1,7 @@
 <div class="home">
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-    <div class="section" *ngFor="let section of homeSection">
-        <div class="section-container">
-            <h1 headline-5>{{section.category}}</h1>
-            <span *ngFor="let tag of section.tags">{{tag}}</span>
-        </div>
-        <drag-scroll #nav>
-            <div class="card-container">
-                <mat-card drag-scroll-item class="activity-card" *ngFor="let activity of section.items">
-                    <app-activity-card [activity]="activity" *ngIf="activity.imageUrl !==undefined"></app-activity-card>
-                </mat-card>
-            </div>
-        </drag-scroll>
+    <div *ngFor="let section of homeSection">
+        <app-home-section [section]="section" [isMobile]="isMobile"></app-home-section>
     </div>
 </div>
 

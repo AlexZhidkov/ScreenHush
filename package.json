@@ -26,6 +26,7 @@
     "angular-star-rating": "^7.0.0",
     "geofire-common": "^6.0.0",
     "marked": "^4.3.0",
+    "ngx-device-detector": "^6.0.2",
     "ngx-drag-scroll": "^16.0.0",
     "ngx-markdown": "^16.0.0",
     "ngx-sharebuttons": "^13.0.0",
