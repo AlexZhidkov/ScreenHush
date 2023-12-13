@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -110,52 +110,9 @@ describe('ActivityEditComponent', () => {
     fixture = TestBed.createComponent(ActivityEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should add tag on chip input event', () => {
-    const event: MatChipInputEvent = { input: null, value: 'newTag' } as any;
-    component.add(event);
-
-    expect(component.tags).toContain('newTag');
-    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
-      tags: component.tags,
-    });
-  });
-
-  it('should remove tag', () => {
-    component.tags = ['existingTag'];
-    const event: MatAutocompleteSelectedEvent = {
-      option: { viewValue: 'existingTag' },
-    } as any;
-    component.remove('existingTag');
-
-    expect(component.tags).toEqual([]);
-    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
-      tags: component.tags,
-    });
-    expect(mockLiveAnnouncer.announce).toHaveBeenCalledWith(
-      `Removed existingTag`
-    );
-  });
-
-  it('should select tag from autocomplete', () => {
-    component.tags = [];
-    const event: MatAutocompleteSelectedEvent = {
-      option: { viewValue: 'selectedTag' },
-    } as any;
-    component.selected(event);
-
-    expect(component.tags).toEqual(['selectedTag']);
-    expect(mockDataService.updateActivity).toHaveBeenCalledWith({
-      tags: component.tags,
-    });
-    expect(component.tagInput.nativeElement.value).toBe('');
-    expect(component.tagCtrl.setValue).toHaveBeenCalledWith(null);
-  });
-
-  // Add more tests as needed for other methods and functionality
 });

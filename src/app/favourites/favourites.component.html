@@ -1,0 +1,11 @@
+<div class="favourites">
+    <a backButton class="share-button">
+        <mat-icon matListItemIcon>arrow_back_ios_new</mat-icon>
+    </a>
+    <h1>My favourites</h1>
+    <div class="favourites-container">
+        <div drag-scroll-item class="activity-card" *ngFor="let activity of favourites">
+            <app-activity-card [activity]="activity" *ngIf="activity.imageUrl !==undefined"></app-activity-card>
+        </div>
+    </div>
+</div>

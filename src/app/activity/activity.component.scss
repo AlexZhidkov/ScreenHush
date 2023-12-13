@@ -178,19 +178,6 @@
             }
         }
 
-        .cdk-overlay-pane .mat-mdc-menu-panel {
-            display: flex;
-            background: transparent;
-            color: white;
-
-            button {
-                border-radius: 0.5rem 0.5rem 0rem 0rem;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.30);
-                background: rgba(176, 190, 197, 0.25);
-                backdrop-filter: blur(12.5px);
-            }
-        }
-
         .expansion-panel {
             font-size: 1rem;
 
@@ -223,5 +210,18 @@
                 font-weight: 500;
             }
         }
+    }
+}
+
+::ng-deep .share-menu {
+    display: flex;
+    background: transparent;
+    color: white;
+
+    button {
+        border-radius: 0.5rem 0.5rem 0rem 0rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.30);
+        background: rgba(176, 190, 197, 0.25);
+        backdrop-filter: blur(12.5px);
     }
 }

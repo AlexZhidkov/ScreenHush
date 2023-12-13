@@ -12,6 +12,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
 import { AnalyticsService } from './services/analytics.service';
+import { MatDividerModule } from '@angular/material/divider';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -27,7 +28,7 @@ describe('AppComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [AppComponent, AuthFirebaseuiAvatarComponent, LocationAutocompleteComponent],
-      imports: [RouterTestingModule, MatIconModule, DragScrollModule, MatMenuModule, MatChipsModule, MatSelectModule ],
+      imports: [RouterTestingModule, MatIconModule, DragScrollModule, MatMenuModule, MatChipsModule, MatSelectModule, MatDividerModule ],
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService }, { provide: AnalyticsService, useValue: mockAnalyticsService },
       ],

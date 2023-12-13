@@ -6,7 +6,7 @@
         <div class="share-right">
             <a class="share-button">
                 <mat-icon mat-icon-button [matMenuTriggerFor]="menu">share</mat-icon>
-                <mat-menu #menu="matMenu">
+                <mat-menu #menu="matMenu" class="share-menu">
                     <button mat-menu-item shareButton="facebook"><mat-icon svgIcon="facebook_custom"></mat-icon> Facebook</button>
                     <button mat-menu-item shareButton="twitter"><mat-icon svgIcon="twitter_custom"></mat-icon> Twitter</button>
                     <button mat-menu-item (click)="sendEmail()"><mat-icon>mail</mat-icon> Send Email</button>
@@ -14,9 +14,9 @@
                     <button mat-menu-item (click)="shareMore()"><mat-icon>send</mat-icon> More</button>
                 </mat-menu>
             </a>
-            <a class="share-button">
-                <mat-icon matListItemIcon>favorite</mat-icon>
-            </a>
+            <button class="share-button" (click)="toggleFavourite()">
+                <mat-icon matListItemIcon>{{ isFavoured ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
             <a class="share-button" [routerLink]="['/edit-activity', (activityDoc$ | async).id]">
                 <mat-icon matListItemIcon>edit</mat-icon>
             </a>

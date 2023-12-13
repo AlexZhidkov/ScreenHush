@@ -1,0 +1,12 @@
+.favourites {
+    display: flex;
+    flex-direction: column;
+    margin-left: 3.75rem;
+    color: white;
+}
+
+.activity-card {
+    display: flex;
+    flex-wrap: wrap;
+    padding-right: 1.125rem;
+}
