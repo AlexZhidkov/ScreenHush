@@ -15,7 +15,6 @@ export class FavouritesService {
 
   constructor(private authService: AuthenticationService) {
     this.setupAuthStatusListener();
-    this.loadFavouritesInCache();
   }
 
   private removeFromCache(activityId: string) {
@@ -32,6 +31,7 @@ export class FavouritesService {
 
       if (this.currentUser) {
         this.userDocRef = doc(this.firestore, 'users', this.currentUser.uid);
+        this.loadFavouritesInCache();
       }
     });
   }
@@ -44,10 +44,6 @@ export class FavouritesService {
   async isActivityFavorited(activityId: string | null): Promise<boolean> {
     if (!this.currentUser || activityId === null) {
       throw new Error('User not logged in or activityId is null');
-    }
-
-    if (!this.userFavoritesCache || this.userFavoritesCache.length === 0) {
-      await this.loadFavouritesInCache();
     }
 
     return this.userFavoritesCache.includes(activityId);
