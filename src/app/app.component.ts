@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
       callback: () => {
         this.analyticsService.logEvent('email_developer');
         window.open(
-          'mailto:azhidkov@gmail.com?subject=Team%20Builder%20App&body=Hi%20Alex,%20Love%20your%20app!'
+          'mailto:azhidkov@gmail.com?subject=ScreenHush%20App&body=Hi%20Alex,%20Love%20your%20app!'
         );
       },
     },
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
     private filterService: FilterService,
     private analyticsService: AnalyticsService,
     private authService: AuthenticationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.authService.onAuthStateChanged((user) => {
