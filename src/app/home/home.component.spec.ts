@@ -1,13 +1,14 @@
-import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { TagsService } from '../services/tags.service';
 import { FilterService } from '../services/filter.service';
-import { DataService } from '../services/data.service';
+import { ActivitiesService } from '../services/activities.service';
 import { of } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -23,18 +24,18 @@ describe('HomeComponent', () => {
     updateData: jasmine.createSpy('updateData'),
   };
 
-  const dataServiceMock = {
+  const activityServiceMock = {
     getGeoActivitiesBySection: jasmine.createSpy('getGeoActivitiesBySection').and.returnValue(Promise.resolve([] as HomeSection[])),
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [HomeComponent],
-      imports: [MatProgressBarModule, MatCardModule, MatIconModule],
+      imports: [MatProgressBarModule, MatCardModule, MatIconModule, MatFormFieldModule],
       providers: [
         { provide: TagsService, useValue: screenHushServiceMock },
         { provide: FilterService, useValue: filterServiceMock },
-        { provide: DataService, useValue: dataServiceMock },
+        { provide: ActivitiesService, useValue: activityServiceMock },
       ],
     });
 
@@ -52,12 +53,10 @@ describe('HomeComponent', () => {
 
     expect(filterService.updateData).toHaveBeenCalledOnceWith({ UseCurrentLocation: false });
 
-    // Advance the virtual clock
-    tick();
+    // Flush microtasks
+    flushMicrotasks();
 
     // Expectations
-    expect(dataServiceMock.getGeoActivitiesBySection).not.toHaveBeenCalled();
-
-    flush();
+    expect(activityServiceMock.getGeoActivitiesBySection).not.toHaveBeenCalled();
   }));
 });

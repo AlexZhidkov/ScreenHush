@@ -112,19 +112,27 @@ $icon-map: (
                     }
 
                     .profile {
-                        .mat-mdc-select-trigger {  @include icon(group);}
+                        .mat-mdc-select-trigger {
+                            @include icon(group);
+                        }
                     }
-                   
+
                     .date {
-                        .mat-mdc-select-trigger {  @include icon(date);}
+                        .mat-mdc-select-trigger {
+                            @include icon(date);
+                        }
                     }
 
                     .price {
-                        .mat-mdc-select-trigger {  @include icon(price);}
+                        .mat-mdc-select-trigger {
+                            @include icon(price);
+                        }
                     }
 
                     .categories {
-                        .mat-mdc-select-trigger {  @include icon(categories);}
+                        .mat-mdc-select-trigger {
+                            @include icon(categories);
+                        }
                     }
 
                     .mat-mdc-select-trigger {
@@ -134,7 +142,7 @@ $icon-map: (
                         border: 1px solid rgba(254, 255, 215, 0.10);
                         border-radius: 2rem;
 
-                        
+
                         &:hover {
                             background: $hoverColour;
                         }
@@ -281,6 +289,10 @@ $icon-map: (
                         }
                     }
                 }
+            }
+
+            .content-container {
+                max-width: 90rem;
             }
         }
     }

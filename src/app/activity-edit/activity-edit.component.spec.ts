@@ -21,7 +21,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ActivityEditComponent } from './activity-edit.component';
 import { TagsService } from '../services/tags.service';
-import { DataService } from '../services/data.service';
+import { ActivitiesService } from '../services/activities.service';
 
 const activatedRouteSnapshot: ActivatedRouteSnapshot = {
   url: [],
@@ -46,13 +46,11 @@ const activatedRouteSnapshot: ActivatedRouteSnapshot = {
 describe('ActivityEditComponent', () => {
   let component: ActivityEditComponent;
   let fixture: ComponentFixture<ActivityEditComponent>;
-  let mockActivatedRoute: Partial<ActivatedRoute>;
   let mockRouter: Partial<Router>;
   let mockMatSnackBar: Partial<MatSnackBar>;
-  let mockMatIconRegistry: Partial<MatIconRegistry>;
   let mockDomSanitizer: Partial<DomSanitizer>;
   let mockTagsService: Partial<TagsService>;
-  let mockDataService: Partial<DataService>;
+  let mockActivitiesService: Partial<ActivitiesService>;
   let mockLiveAnnouncer: Partial<LiveAnnouncer>;
 
   beforeEach(waitForAsync(() => {
@@ -63,7 +61,7 @@ describe('ActivityEditComponent', () => {
     mockMatSnackBar = { open: jasmine.createSpy('open') };
     mockDomSanitizer = { bypassSecurityTrustResourceUrl: (url: string) => url };
     mockTagsService = { getAllTags: () => ['tag1', 'tag2'] };
-    mockDataService = {
+    mockActivitiesService = {
       getActivityDoc: jasmine.createSpy('getActivityDoc').and.returnValue({
         onSnapshot: (callback: any) => callback({ data: () => ({}) }),
       }),
@@ -102,7 +100,7 @@ describe('ActivityEditComponent', () => {
         { provide: MatSnackBar, useValue: mockMatSnackBar },
         { provide: DomSanitizer, useValue: mockDomSanitizer },
         { provide: TagsService, useValue: mockTagsService },
-        { provide: DataService, useValue: mockDataService },
+        { provide: ActivitiesService, useValue: mockActivitiesService },
         { provide: LiveAnnouncer, useValue: mockLiveAnnouncer },
       ],
     }).compileComponents();

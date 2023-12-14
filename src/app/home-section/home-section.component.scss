@@ -1,0 +1,69 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import '../../app/styles/media';
+
+@mixin theme($theme) {
+    $color-config: mat.get-color-config($theme);
+    $typography-config: mat.get-typography-config($theme);
+
+    $primary-palette: map.get($color-config, 'primary');
+    $textColor: mat.get-color-from-palette($primary-palette, 300-contrast);
+    $captionColour: mat.get-color-from-palette($primary-palette, 500-contrast);
+
+    .section {
+        position: relative;
+        padding-bottom: 1.5rem;
+        color: $textColor;
+
+        .section-header {
+            padding-bottom: 1.5rem;
+        }
+
+        .h1 {
+            font-size: 1.5rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.5rem;
+            letter-spacing: 0.03125rem;
+            margin: 0;
+            padding: 0 0.75rem 0.5rem 0rem;
+        }
+
+        span {
+            color: $captionColour;
+            font-size: 0.8125rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.5rem;
+            letter-spacing: 0.03125rem;
+        }
+
+        .scroll-button {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 6.25rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2.5px);
+            width: 2.5rem;
+            height: 2.5rem;
+         
+            cursor: pointer;
+
+            &.left {
+                left: 0;
+
+                mat-icon {
+                    width: 1rem;
+                }
+            }
+
+            &.right {
+                right: 0;
+            }
+        }
+    }
+}
