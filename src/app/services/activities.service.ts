@@ -76,16 +76,16 @@ export class ActivitiesService {
       let allActivities = [];
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
-          const activity = doc.data() as any;
-          activity.id = doc.id;
+              const activity = doc.data() as any;
+              activity.id = doc.id;
           // We have to filter out a few false positives due to GeoHash
           // accuracy, but most will match
-          const distanceInKm = distanceBetween(
-            [activity.geoPoint.latitude, activity.geoPoint.longitude],
-            center
-          );
-          const distanceInM = distanceInKm * 1000;
-          activity.distanceInKm = distanceInKm;
+              const distanceInKm = distanceBetween(
+                [activity.geoPoint.latitude, activity.geoPoint.longitude],
+                center
+              );
+              const distanceInM = distanceInKm * 1000;
+              activity.distanceInKm = distanceInKm;
           if (distanceInM <= radiusInMeters) {
             allActivities.push(activity);
           }
@@ -94,7 +94,7 @@ export class ActivitiesService {
 
       return allActivities.sort((a, b) => {
         return a.distanceInKm - b.distanceInKm;
-      });
+            });
     });
   }
 

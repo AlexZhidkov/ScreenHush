@@ -6,6 +6,7 @@
 @use './colours' as colours;
 @use '../../styles.scss' as root;
 @use '../app.component.scss' as app;
+@use '../navbar/navbar.component.scss' as navbar;
 @use '../account/layout.component.scss' as account;
 @use '../activity/activity.component.scss' as activityPage;
 @use '../activity-card/activity-card.component.scss' as activityCard;
@@ -51,6 +52,7 @@ $ScreenHush-theme: mat.define-light-theme((color: (primary: $ScreenHush-primary,
 // that you are using.
 @include root.theme($ScreenHush-theme);
 @include app.theme($ScreenHush-theme);
+@include navbar.theme($ScreenHush-theme);
 @include account.theme($ScreenHush-theme);
 @include activityPage.theme($ScreenHush-theme);
 @include activityCard.theme($ScreenHush-theme);

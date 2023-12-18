@@ -17,19 +17,19 @@
             <button class="share-button" (click)="toggleFavourite()">
                 <mat-icon matListItemIcon>{{ isFavoured ? 'favorite' : 'favorite_border' }}</mat-icon>
             </button>
-            <a class="share-button" [routerLink]="['/edit-activity', (activityDoc$ | async).id]">
+            <a class="share-button" [routerLink]="['/edit-activity', (activityDoc$ | async)?.id]">
                 <mat-icon matListItemIcon>edit</mat-icon>
             </a>
         </div>
     </div>
     <div class="image-container">
-        <img mat-card-image [src]="(activityDoc$ | async).imageUrl" alt="Image">
+        <img mat-card-image [src]="(activityDoc$ | async)?.imageUrl">
     </div>
     <div class="activity-container">
         <div class="activity-hero">
             <div class="activity-section left">
-                <h1 class="mat-headline-1">{{(activityDoc$ | async).title}}</h1>
-                <markdown [data]="(activityDoc$ | async).description"></markdown>
+                <h1 class="mat-headline-1">{{(activityDoc$ | async)?.title}}</h1>
+                <markdown [data]="(activityDoc$ | async)?.description"></markdown>
             </div>
             <div class="activity-section">
                 <div class="activity-rating">
@@ -46,8 +46,8 @@
                 <mat-list class="activity-info">
                     <mat-list-item>
                         <mat-icon matListItemIcon>location_on</mat-icon>
-                        <a [href]="(activityDoc$ | async).mapsUrl" target="_blank" style="color: white;">
-                            {{(activityDoc$ | async).address}}
+                        <a [href]="(activityDoc$ | async)?.mapsUrl" target="_blank" style="color: white;">
+                            {{(activityDoc$ | async)?.address}}
                         </a>
                     </mat-list-item>
                     <mat-list-item>
@@ -63,8 +63,8 @@
                     </mat-list-item>
                     <mat-list-item>
                         <mat-icon matListItemIcon>public</mat-icon>
-                        <a [href]="(activityDoc$ | async).website" target="_blank" style="color: white;">
-                            {{(activityDoc$ | async).website}}
+                        <a [href]="(activityDoc$ | async)?.website" target="_blank" style="color: white;">
+                            {{(activityDoc$ | async)?.website}}
                         </a>
                     </mat-list-item>
                     <mat-list-item>
@@ -80,10 +80,10 @@
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                         <mat-expansion-panel-header>
                             <mat-panel-description>
-                                {{(activityDoc$ | async).title}}
+                                {{(activityDoc$ | async)?.title}}
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <markdown [data]="(activityDoc$ | async).description"></markdown>
+                        <markdown [data]="(activityDoc$ | async)?.description"></markdown>
                     </mat-expansion-panel>
                 </mat-accordion>
             </div>

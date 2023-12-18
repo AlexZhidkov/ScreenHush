@@ -14,12 +14,19 @@ import { AnalyticsService } from './services/analytics.service';
 import { mockUser } from './mocks/mock-user';
 import { AuthFirebaseuiAvatarComponent } from './auth-firebaseui-avatar/auth-firebaseui-avatar.component';
 import { LocationAutocompleteComponent } from './location-autocomplete/location-autocomplete.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ActivitiesService } from './services/activities.service';
+import { HomeSection } from './model/home-activity-model';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
   let mockAuthenticationService: jasmine.SpyObj<AuthenticationService>;
   let mockAnalyticsService: jasmine.SpyObj<AnalyticsService>;
+
+  const activityServiceMock = {
+    getGeoActivitiesBySection: jasmine.createSpy('getGeoActivitiesBySection').and.returnValue(Promise.resolve([] as HomeSection[])),
+  };
 
   beforeEach(() => {
     mockAuthenticationService = jasmine.createSpyObj('FirebaseService', [
@@ -28,7 +35,7 @@ describe('AppComponent', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [AppComponent, AuthFirebaseuiAvatarComponent, LocationAutocompleteComponent],
+      declarations: [AppComponent, AuthFirebaseuiAvatarComponent, LocationAutocompleteComponent, NavbarComponent],
       imports: [
         RouterTestingModule,
         MatIconModule,
@@ -43,6 +50,7 @@ describe('AppComponent', () => {
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: AnalyticsService, useValue: mockAnalyticsService },
+        { provide: ActivitiesService, useValue: activityServiceMock },
       ],
     });
 
