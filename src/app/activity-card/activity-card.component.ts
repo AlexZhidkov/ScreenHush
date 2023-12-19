@@ -14,7 +14,6 @@ export class ActivityCardComponent implements OnInit {
 
   tipClass: string = ''; // Initialize componentClass property
   tipText: string = 'Free';
-  distance = Math.round(Math.random() * 10) / 10;
   
   ngOnInit() {
     const percentageGreen = 60;

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { TagsService } from '../services/tags.service';
 import { MatChipOption } from '@angular/material/chips';
@@ -6,22 +6,22 @@ import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
 import { Subscription } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
-import { Router } from '@angular/router';
 import { ActivitiesService } from '../services/activities.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { CacheService } from '../services/cache.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnDestroy {
-  isLoading: boolean = true;
+export class HomeComponent implements OnInit, OnDestroy {
+  isLoading = false;
   geoLocationError = false;
   user: User | null = null;
   allActivities: any[] = [];
   selectedActivities: any[] = [];
-  homeSection: HomeSection[] = [];
+  homeSection: HomeSection[] | null = [];
   allTags: string[] = [];
   selectedTags: string[] = [];
   filterIsOpen = true;
@@ -30,74 +30,91 @@ export class HomeComponent implements OnDestroy {
   geoLocationState: PermissionState | undefined = undefined;
   center: Geopoint = [0, 0];
   radiusInMeters = 5 * 1000;
-  subscription: Subscription;
+  filterSubscription: Subscription;
   searchPrompt: string | null = null;
   isMobile: boolean;
+  cacheKey = 'home-activities';
+  private activitiesSubscription: Subscription;
 
   constructor(
+    private cacheService: CacheService<HomeSection[]>,
     private tagsService: TagsService,
     private filterService: FilterService,
     private activitiesService: ActivitiesService,
-    private router: Router,
     private deviceService: DeviceDetectorService
   ) {
     this.allTags = tagsService.getAllTags();
+    this.filterSubscription = filterService.filterSource$.subscribe((filter) => {
+      this.handleFilterChange(filter);
+    });
 
-
-    this.getDeviceInformation();
-
-    this.subscription = filterService.filterSource$.subscribe((filter) => {
-      if (filter.UseCurrentLocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          console.log(position);
-          this.center = [
-            position.coords.latitude,
-            position.coords.longitude,
-          ] as Geopoint;
-          activitiesService.getGeoActivitiesBySection(this.center).then((homeSection) => {
-            this.homeSection = homeSection;
-          });
-        });
-      } else {
-        this.center = filter.Location ? filter.Location : [0, 0];
-      }
+    this.activitiesSubscription = this.cacheService.cache$.subscribe((cachedActivities) => {
+      this.homeSection = cachedActivities;
     });
 
     navigator.permissions.query({ name: 'geolocation' }).then((result) => {
       this.geoLocationState = result.state;
     });
+  }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position);
-        this.center = [
-          position.coords.latitude,
-          position.coords.longitude,
-        ] as Geopoint;
+ async ngOnInit() {
+    this.isLoading = true;
+    await this.getHomeData(this.cacheKey);
+  }
 
-        activitiesService.getGeoActivitiesBySection(this.center).then((homeSection: HomeSection[]) => {
-          this.homeSection = homeSection;
-          this.isLoading = false;
-        });
-      });
+  ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
+    this.activitiesSubscription.unsubscribe();
+  }
+
+  private async getHomeData(key: string) {
+    const cachedActivities = await this.cacheService.get(key);
+
+    if (!cachedActivities) {
+      this.isLoading = false;
+      if (navigator.geolocation) {
+        this.getActivitiesByLocation();
+        this.isLoading = false;
+      }
+    } else {
+      this.isLoading = false;
     }
+  }
+
+  private async handleFilterChange(filter: any) {
+    if (filter.UseCurrentLocation) {
+      await this.getActivitiesByLocation();
+    } else {
+      this.center = filter.Location ? filter.Location : [0, 0];
+    }
+  }
+
+  private async getActivitiesByLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.center = [position.coords.latitude, position.coords.longitude] as Geopoint;
+      this.getActivities();
+    });
+  }
+
+  private async getActivities() {
+     this.activitiesService.getGeoActivitiesBySection(this.center).then((homeSection) => {
+      this.cacheService.set(this.cacheKey, homeSection);
+    });
   }
 
   getDeviceInformation() {
     this.isMobile = !this.deviceService.isDesktop();
   }
-  
+
   search() {
-    if (!this.searchPrompt) { return }
+    if (!this.searchPrompt) {
+      return;
+    }
     this.isLoading = true;
     this.activitiesService.search(this.searchPrompt).then((x: HomeSection[]) => {
       this.homeSection = x;
       this.isLoading = false;
-      this.searchPrompt = null
+      this.searchPrompt = null;
     });
-  }
-
-  ngOnDestroy() { 
-    this.subscription.unsubscribe();
   }
 }

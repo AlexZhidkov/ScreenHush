@@ -58,6 +58,7 @@ import { ShareModule } from 'ngx-sharebuttons';
 import { FavouritesComponent } from './favourites/favourites.component';
 import { HomeSectionComponent } from './home-section/home-section.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import {DEFAULT_CONFIG, NgForageOptions, NgForageConfig, Driver} from 'ngforage';
 
 @NgModule({
   declarations: [
@@ -122,7 +123,16 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatExpansionModule,
     MatButtonModule
   ],
-  providers: [ScreenTrackingService, UserTrackingService],
+  providers: [ScreenTrackingService, UserTrackingService, {
+    provide: DEFAULT_CONFIG,
+    useValue: {
+      name: 'ScreenHush',
+      driver: [ // defaults to indexedDB -> webSQL -> localStorage
+        Driver.INDEXED_DB,
+        Driver.LOCAL_STORAGE
+      ]
+    } as NgForageOptions
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

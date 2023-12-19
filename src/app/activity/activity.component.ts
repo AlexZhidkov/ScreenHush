@@ -7,6 +7,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FavouritesService } from '../services/favourites.service';
 import { User } from '@angular/fire/auth';
 import { ActivitiesService } from '../services/activities.service';
+import { CacheService } from '../services/cache.service';
 
 @Component({
   selector: 'app-activity',
@@ -22,6 +23,7 @@ export class ActivityComponent implements OnInit  {
   user: User;
   
   constructor(
+    private cacheService: CacheService<any>,
     private activitiesService: ActivitiesService,
     private route: ActivatedRoute,
     private location: Location,

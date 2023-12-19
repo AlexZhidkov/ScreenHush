@@ -7,7 +7,7 @@
             <p>{{activity.title}}</p>
             <div class="activity-title-location">
                 <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon>
-                <p class="activity-distance">{{distance}}km</p>
+                <p class="activity-distance">{{activity.distanceInKm | number: '1.0-1'}}km</p>
             </div>
         </div>
 
