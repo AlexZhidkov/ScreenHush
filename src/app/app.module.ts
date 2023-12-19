@@ -57,6 +57,7 @@ import { StarRatingModule } from 'angular-star-rating';
 import { ShareModule } from 'ngx-sharebuttons';
 import { FavouritesComponent } from './favourites/favourites.component';
 import { HomeSectionComponent } from './home-section/home-section.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { HomeSectionComponent } from './home-section/home-section.component';
     BackButtonDirective,
     FavouritesComponent,
     HomeSectionComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

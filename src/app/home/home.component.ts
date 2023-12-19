@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { TagsService } from '../services/tags.service';
 import { MatChipOption } from '@angular/material/chips';
@@ -6,7 +6,6 @@ import { Geopoint } from 'geofire-common';
 import { FilterService } from '../services/filter.service';
 import { Subscription } from 'rxjs';
 import { HomeSection } from '../model/home-activity-model';
-import { DocumentReference } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ActivitiesService } from '../services/activities.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -16,7 +15,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
   isLoading: boolean = true;
   geoLocationError = false;
   user: User | null = null;
@@ -55,8 +54,8 @@ export class HomeComponent {
             position.coords.latitude,
             position.coords.longitude,
           ] as Geopoint;
-          activitiesService.getGeoActivitiesBySection(this.center).then((x) => {
-            this.homeSection = x;
+          activitiesService.getGeoActivitiesBySection(this.center).then((homeSection) => {
+            this.homeSection = homeSection;
           });
         });
       } else {
@@ -76,8 +75,8 @@ export class HomeComponent {
           position.coords.longitude,
         ] as Geopoint;
 
-        activitiesService.getGeoActivitiesBySection(this.center).then((x: HomeSection[]) => {
-          this.homeSection = x;
+        activitiesService.getGeoActivitiesBySection(this.center).then((homeSection: HomeSection[]) => {
+          this.homeSection = homeSection;
           this.isLoading = false;
         });
       });
@@ -85,15 +84,9 @@ export class HomeComponent {
   }
 
   getDeviceInformation() {
-    this.isMobile = this.deviceService.isMobile();
+    this.isMobile = !this.deviceService.isDesktop();
   }
-
-  createNewActivity() {
-    this.activitiesService.createNewActivity().then((newActivityReference: DocumentReference) => {
-      this.router.navigate([`edit-activity/${newActivityReference.id}`]);
-    });
-  }
-
+  
   search() {
     if (!this.searchPrompt) { return }
     this.isLoading = true;
@@ -102,5 +95,9 @@ export class HomeComponent {
       this.isLoading = false;
       this.searchPrompt = null
     });
+  }
+
+  ngOnDestroy() { 
+    this.subscription.unsubscribe();
   }
 }

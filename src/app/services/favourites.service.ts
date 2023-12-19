@@ -20,7 +20,7 @@ export class FavouritesService {
   private firestore: Firestore = inject(Firestore);
   private currentUser: User | null;
   private userDocRef: DocumentReference<DocumentData>;
-  private userFavoritesCache: string[];
+  private userFavoritesCache: string[] = [];
 
   constructor(private authService: AuthenticationService) {
     this.setupAuthStatusListener();

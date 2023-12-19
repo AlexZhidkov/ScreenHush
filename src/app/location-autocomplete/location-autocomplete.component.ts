@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, switchMap, of, BehaviorSubject } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { GeolocationService } from '../services/geolocation.service';
   templateUrl: './location-autocomplete.component.html',
   styleUrls: ['./location-autocomplete.component.scss'],
 })
-export class LocationAutocompleteComponent {
+export class LocationAutocompleteComponent implements OnInit {
   @Output() selectedLocation = new EventEmitter<AutocompleteResult>();
   @Output() useMyLocation = new EventEmitter<boolean>();
   constructor(private geolocationService: GeolocationService, private googleLoaderService: GoogleLoaderService) { }

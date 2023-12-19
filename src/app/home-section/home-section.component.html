@@ -4,7 +4,8 @@
         <span *ngFor="let tag of section.tags">{{tag}}</span>
     </div>
 
-    <drag-scroll #nav (dragStart)="dragStart()" [drag-disabled]="true">
+    <drag-scroll #nav (dragStart)="dragStart()"       (reachesLeftBound)="reachesLeft($event)"
+    (reachesRightBound)="reachesRight($event)"[drag-disabled]="true">
         <div class="card-container">
             <mat-card drag-scroll-item class="activity-card" *ngFor="let activity of section.items">
                 <app-activity-card [activity]="activity" *ngIf="activity.imageUrl !==undefined"></app-activity-card>
@@ -13,7 +14,7 @@
     </drag-scroll>
 
     <div *ngIf="enableScrollButtons && showScrollButtons">
-        <div class="scroll-button left" (click)="moveLeft()"><mat-icon fxFlexAlign="center"> arrow_back_ios</mat-icon></div>
-        <div class="scroll-button right" (click)="moveRight()"><mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon></div>
+        <div *ngIf="showLeftScrollButton" class="scroll-button left" (click)="moveLeft()"><mat-icon fxFlexAlign="center"> arrow_back_ios</mat-icon></div>
+        <div *ngIf="showRightScrollButton" class="scroll-button right" (click)="moveRight()"><mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon></div>
     </div>
 </div>

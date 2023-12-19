@@ -1,92 +1,7 @@
-<ng-template #table>
-  <mat-chip class="nav-option">
-    <mat-select value='profile' panelClass="select-panel" class="profile">
-      <mat-option value="profile" disabled>Profile</mat-option>
-      <mat-option value="couples">Couples</mat-option>
-      <mat-option value="me">Just For Me</mat-option>
-      <mat-option value="friends">With My Friends</mat-option>
-    </mat-select>
-  </mat-chip>
-  
-  <app-location-autocomplete (useMyLocation)="onMyLocationSelected($event)"
-  (selectedLocation)="onLocationSelected($event)"></app-location-autocomplete>
-
-  <mat-chip class="nav-option">
-    <mat-select value='date' panelClass="select-panel" class="date">
-      <mat-option value="date" disabled>Date</mat-option>
-      <mat-option value="today">Today</mat-option>
-      <mat-option value="tomorrow">Tomorrow</mat-option>
-      <mat-option value="next_week">Next week</mat-option>
-    </mat-select>
-  </mat-chip>
-
-  <mat-chip class="nav-option">
-    <mat-select value='price' panelClass="select-panel" class="price"> 
-      <mat-option value="price" disabled>Price</mat-option>
-      <mat-option value="any">Any</mat-option>
-      <mat-option value="free">Free</mat-option>
-    </mat-select>
-  </mat-chip>
-
-  <mat-chip class="nav-option">
-    <mat-select placeholder="Categories" value='categories' panelClass="select-panel" class="categories" multiple>
-      <mat-option value="park">Park</mat-option>
-      <mat-option value="playground">Playground</mat-option>
-      <mat-option value="church">Church</mat-option>
-      <mat-option value="gym">Gym</mat-option>
-    </mat-select>
-  </mat-chip>
-</ng-template>
-
 <div class="app">
-  <div class="navbar">
-    <div class="navbar-mobile" *ngIf="currentUser">
-      <div class="avatar" *ngIf="equalsRoute('/')">
-        <span class="username hide-desktop">{{currentUser?.displayName}}</span>
-        <auth-firebaseui-avatar [links]="avatarLinks" [canViewAccount]=false (onSignOut)="onSignOut()">
-        </auth-firebaseui-avatar>
-      </div>
+  <app-navbar [showFilterButtons]="showFilterButtons()"></app-navbar>
 
-      <drag-scroll style="width: 100%;height:60px;">
-        <div class="mobile-options">
-          <ng-container *ngIf="equalsRoute('/')">
-            <ng-container *ngTemplateOutlet="table"></ng-container>
-          </ng-container>
-        </div>
-      </drag-scroll>
-    </div>
-
-    <div class="navbar-left" *ngIf="currentUser">
-      <div class="logo-container">
-        <button class="logo" mat-icon-button [routerLink]="['/']" data-cy="homeBtn">
-          <img class="logo" src="../assets/img/nav-icon.png" />
-        </button>
-      </div>
-      <ng-container *ngIf="equalsRoute('/')">
-        <ng-container *ngTemplateOutlet="table"></ng-container>
-      </ng-container>
-    </div>
-
-    <div class="navbar-right" *ngIf="currentUser">
-      <button mat-icon-button>
-        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="shopping_bag"></mat-icon>
-      </button>
-
-      <button mat-icon-button><mat-icon aria-hidden="false" aria-label="Example home icon"
-          fontIcon="sort"></mat-icon></button>
-
-      <button mat-icon-button routerLink="/favourites"> <mat-icon aria-hidden="false" aria-label="Example home icon"
-          fontIcon="favorite"></mat-icon></button>
-
-      <button mat-icon-button> <mat-icon aria-hidden="false" aria-label="Example home icon"
-          fontIcon="notifications"></mat-icon></button>
-
-      <auth-firebaseui-avatar [links]="avatarLinks" [canViewAccount]=false (onSignOut)="onSignOut()">
-      </auth-firebaseui-avatar>
-    </div>
-  </div>
-
-  <footer *ngIf="equalsRoute('/')">
+  <footer *ngIf="showFilterButtons()">
     <div class="toolbarNav">
       <button routerLink="/" routerLinkActive="active-link">
         <mat-icon class="material-icons color_blue">
@@ -110,6 +25,4 @@
   </footer>
 </div>
 
-<div class="content-container">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
